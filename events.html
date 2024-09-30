@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            text-align: center;
+        }
+
+        .event {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .event h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .event p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Available Events</h1>
+        <div id="eventsList"></div>
+    </div>
+
+    <script>
+        // Fetch events from the backend
+        fetch('http://localhost:8080/events') // Adjust endpoint if necessary
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json(); // Assuming the response is in JSON format
+        })
+        .then(events => {
+            const eventsList = document.getElementById('eventsList');
+
+            if (events.length === 0) {
+                eventsList.innerHTML = '<p>No events available at this time.</p>';
+            } else {
+                events.forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event');
+
+                    eventDiv.innerHTML = `
+                        <h2>${event.name}</h2>
+                        <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
+                        <p><strong>Description:</strong> ${event.description}</p>
+                    `;
+                    
+                    eventsList.appendChild(eventDiv);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error);
+            document.getElementById('eventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+        });
+    </script>
+</body>
+</html>

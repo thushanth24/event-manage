@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            padding-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Events</h1>
+        <table id="eventsTable">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Event Date</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Events will be populated here -->
+            </tbody>
+        </table>
+        <p id="manageResponseMessage"></p>
+    </div>
+
+    <script>
+        function fetchEvents() {
+            fetch('http://localhost:8080/events') // Adjust endpoint to your API
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json(); // Assuming the response is JSON
+                })
+                .then(events => {
+                    const tableBody = document.getElementById('eventsTable').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Clear existing table rows
+
+                    events.forEach(event => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${event.name}</td>
+                            <td>${new Date(event.date).toLocaleDateString()}</td>
+                            <td>${event.description}</td>
+                            <td><button onclick="deleteEvent('${event.id}')">Delete</button></td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
+                });
+        }
+
+        function deleteEvent(eventId) {
+            fetch(`http://localhost:8080/events/${eventId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                fetchEvents(); // Refresh the events list after deletion
+            })
+            .catch(error => {
+                document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
+            });
+        }
+
+        // Fetch events when the page loads
+        document.addEventListener('DOMContentLoaded', fetchEvents);
+    </script>
+</body>
+</html>

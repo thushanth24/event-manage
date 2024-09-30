@@ -124,7 +124,8 @@
         });
 
         document.getElementById('userButton').addEventListener('click', function() {
-            alert('User section not implemented yet.');
+            // Redirect to the events page for users
+            window.location.href = 'events.html';
         });
 
         // Admin login form submission
@@ -152,7 +153,8 @@
             })
             .then(data => {
                 document.getElementById('adminResponseMessage').textContent = `Login successful: ${data}`;
-                // Optionally, redirect or perform actions on successful login
+                // Redirect to the event creation dashboard
+                window.location.href = 'dashboard.html'; // Adjust this to your actual admin dashboard page
             })
             .catch(error => {
                 document.getElementById('adminResponseMessage').textContent = `Error: ${error.message}`;
