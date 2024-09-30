@@ -34,7 +34,7 @@
             margin: 10px 0 5px;
         }
 
-        input {
+        input, textarea {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
@@ -61,14 +61,20 @@
     <div class="container">
         <h1>Create Event</h1>
         <form id="createEventForm">
-            <label for="eventName">Event Name:</label>
-            <input type="text" id="eventName" required>
+            <label for="eventTitle">Event Title:</label>
+            <input type="text" id="eventTitle" required>
 
             <label for="eventDate">Event Date:</label>
             <input type="date" id="eventDate" required>
 
             <label for="eventDescription">Event Description:</label>
             <textarea id="eventDescription" rows="4" required></textarea>
+
+            <label for="eventLocation">Event Location:</label>
+            <input type="text" id="eventLocation">
+
+            <label for="eventCreatedBy">Created By:</label>
+            <input type="text" id="eventCreatedBy" required>
 
             <button type="submit">Create Event</button>
         </form>
@@ -80,13 +86,15 @@
             event.preventDefault(); // Prevent default form submission
 
             const newEvent = {
-                name: document.getElementById('eventName').value,
+                title: document.getElementById('eventTitle').value,
                 date: document.getElementById('eventDate').value,
-                description: document.getElementById('eventDescription').value
+                description: document.getElementById('eventDescription').value,
+                location: document.getElementById('eventLocation').value,
+                createdBy: document.getElementById('eventCreatedBy').value
             };
 
             // Fetch request for event creation
-            fetch('http://localhost:8080/events', { // Adjust endpoint to your API
+            fetch('http://localhost:8082/events', { // Adjust endpoint to your API
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

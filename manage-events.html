@@ -80,7 +80,7 @@
 
     <script>
         function fetchEvents() {
-            fetch('http://localhost:8080/events') // Adjust endpoint to your API
+            fetch('http://localhost:8082/events') // Adjust endpoint to your API
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
@@ -108,7 +108,7 @@
         }
 
         function deleteEvent(eventId) {
-            fetch(`http://localhost:8080/events/${eventId}`, {
+            fetch(`http://localhost:8082/events/${eventId}`, {
                 method: 'DELETE'
             })
             .then(response => {
