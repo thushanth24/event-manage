@@ -7,5 +7,3 @@ distribution = "2201.10.0"
 [build-options]
 observabilityIncluded = true
 
-[dependencies]
-ballerinax/mysql = "0.1.0"
