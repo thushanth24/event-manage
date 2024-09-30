@@ -60,6 +60,10 @@
             margin-top: 10px;
             color: red;
         }
+
+        #createAccountContainer {
+            display: none; /* Initially hide the create account form */
+        }
     </style>
 </head>
 <body>
@@ -68,6 +72,22 @@
         <h2>Select your role:</h2>
         <button id="adminButton">Admin</button>
         <button id="userButton">User</button>
+    </div>
+
+    <div class="container" id="adminContainer" style="display: none;">
+        <h1>Admin Login</h1>
+        <form id="adminLoginForm">
+            <label for="adminUsername">Username:</label>
+            <input type="text" id="adminUsername" required>
+
+            <label for="adminPassword">Password:</label>
+            <input type="password" id="adminPassword" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <p id="adminResponseMessage"></p>
+        
+        <button id="createAccountButton">Create Account</button> <!-- Create Account button -->
     </div>
 
     <div class="container" id="createAccountContainer" style="display: none;">
@@ -94,19 +114,64 @@
             <button type="submit">Create Account</button>
         </form>
         <p id="responseMessage"></p>
+        <button id="backToLoginButton">Back to Login</button> <!-- Back to Login button -->
     </div>
 
     <script>
         document.getElementById('adminButton').addEventListener('click', function() {
-            alert('Redirecting to Admin Login...');
-            // Implement your admin login logic here
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('adminContainer').style.display = 'block';
         });
 
         document.getElementById('userButton').addEventListener('click', function() {
-            document.getElementById('mainContainer').style.display = 'none';
+            alert('User section not implemented yet.');
+        });
+
+        // Admin login form submission
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const adminCredentials = {
+                username: document.getElementById('adminUsername').value,
+                password: document.getElementById('adminPassword').value
+            };
+
+            // Fetch request for login
+            fetch('http://localhost:8081/login', { // Adjust endpoint if necessary
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(adminCredentials)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text(); // Assuming the response is text
+            })
+            .then(data => {
+                document.getElementById('adminResponseMessage').textContent = `Login successful: ${data}`;
+                // Optionally, redirect or perform actions on successful login
+            })
+            .catch(error => {
+                document.getElementById('adminResponseMessage').textContent = `Error: ${error.message}`;
+            });
+        });
+
+        // Handle creating account button click
+        document.getElementById('createAccountButton').addEventListener('click', function() {
+            document.getElementById('adminContainer').style.display = 'none';
             document.getElementById('createAccountContainer').style.display = 'block';
         });
 
+        // Handle back to login button click
+        document.getElementById('backToLoginButton').addEventListener('click', function() {
+            document.getElementById('createAccountContainer').style.display = 'none';
+            document.getElementById('adminContainer').style.display = 'block';
+        });
+
+        // Create account form submission
         document.getElementById('createAccountForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -119,6 +184,7 @@
                 phonenumber: document.getElementById('phonenumber').value
             };
 
+            // Fetch request for account creation
             fetch('http://localhost:8080/users', {
                 method: 'POST',
                 headers: {
@@ -128,14 +194,13 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok: ' + response.statusText);
                 }
                 return response.text(); // Assuming the response is text
             })
             .then(data => {
                 document.getElementById('responseMessage').textContent = `User added with ID: ${data}`;
-                // Optionally, reset the form here
-                document.getElementById('createAccountForm').reset();
+                document.getElementById('createAccountForm').reset(); // Reset the form after successful submission
             })
             .catch(error => {
                 document.getElementById('responseMessage').textContent = `Error: ${error.message}`;

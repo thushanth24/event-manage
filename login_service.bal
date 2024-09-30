@@ -1,6 +1,6 @@
 import ballerina/http;
 
-// Service listens on port 8080 for "/login" path
+// Service listens on port 8081 for "/login" path
 service /login on new http:Listener(8081) {
 
     // Resource to handle the POST request for login
@@ -8,10 +8,10 @@ service /login on new http:Listener(8081) {
         string username = loginData["username"].toString();
         string password = loginData["password"].toString();
 
-        boolean|error loginResult = loginUser(username, password);
+        boolean|error loginResult = loginUser(username, password); // Ensure this function is defined
 
         http:Response res = new;
-        if loginResult is boolean && loginResult == true {
+        if loginResult is boolean && loginResult {
             res.setTextPayload("Login successful!");
         } else {
             res.setTextPayload("Invalid username or password.");
@@ -30,13 +30,9 @@ service /login on new http:Listener(8081) {
     // Handling preflight OPTIONS requests for CORS
     resource function options .(http:Caller caller) returns error? {
         http:Response res = new;
-
-        // Allow all origins for preflight requests
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-        // Send the response
         check caller->respond(res);
     }
 }
