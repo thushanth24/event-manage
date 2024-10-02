@@ -2,7 +2,7 @@ import ballerinax/mysql;
 import ballerina/sql;
 
 // Define a unique EventRecord type
-public type EventRecord record {|
+public type EventRecord record {| 
     int id?;                  // Event ID
     string title;             // Event title
     string description;       // Event description
@@ -36,6 +36,20 @@ isolated function createEvent(EventRecord newEvent) returns int|error {
     } else {
         return error("Unable to obtain last insert ID");
     }
+}
+
+// Function to retrieve events created by the logged-in user
+isolated function getEventsByUser(string username) returns EventRecord[]|error {
+    EventRecord[] events = [];
+    stream<EventRecord, sql:Error?> resultStream = eventDbClient->query(`
+        SELECT * FROM events WHERE createdBy = ${username}
+    `);
+    check from EventRecord event in resultStream
+        do {
+            events.push(event);
+        };
+    check resultStream.close();
+    return events;
 }
 
 // Function to retrieve all events

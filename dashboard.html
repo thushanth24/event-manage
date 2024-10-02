@@ -10,7 +10,7 @@
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-direction: column;
             padding: 20px;
         }
@@ -37,10 +37,29 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #0056b3;
+        }
+
+        #eventList {
+            margin-top: 20px;
+            text-align: left;
+            display: none; /* Hide by default */
+        }
+
+        .event {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .event h3 {
+            margin: 0;
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -48,7 +67,64 @@
     <div class="container">
         <h1>Admin Dashboard</h1>
         <button onclick="window.location.href='create-event.html'">Create Event</button>
-        <button onclick="window.location.href='manage-events.html'">Manage Events</button>
+        <button onclick="fetchEvents()">Manage Events</button> <!-- Call fetchEvents on button click -->
+        
+        <div id="eventList"></div> <!-- Placeholder for event list -->
     </div>
+
+    <script>
+        // Fetch events created by the admin
+        // Fetch events created by the admin
+function fetchEvents() {
+    const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+
+    console.log(`Fetching events for user: ${loggedInUser}`); // Log the logged-in user
+
+    fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjusted to use 'username'
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json(); // Assuming the response is in JSON format
+        })
+        .then(events => {
+            console.log(events); // Log the fetched events
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = ''; // Clear previous events
+            eventList.style.display = 'block'; // Show the event list
+
+            if (events.length === 0) {
+                eventList.innerHTML = '<p>No events created by you yet.</p>';
+            } else {
+                events.forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event');
+
+                    eventDiv.innerHTML = `
+                        <h3>${event.title}</h3>
+                        <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
+                        <p><strong>Description:</strong> ${event.description}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                    `;
+
+                    eventList.appendChild(eventDiv);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error);
+            document.getElementById('eventList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+            document.getElementById('eventList').style.display = 'block'; // Ensure it shows on error
+        });
+}
+
+    
+        // Simulated function to retrieve the logged-in username
+        function getLoggedInUsername() {
+            // Replace with your logic to get the currently logged-in user's username
+            return "adminUsername"; // Example username; change accordingly
+        }
+    </script>
+    
 </body>
 </html>

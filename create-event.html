@@ -73,8 +73,7 @@
             <label for="eventLocation">Event Location:</label>
             <input type="text" id="eventLocation">
 
-            <label for="eventCreatedBy">Created By:</label>
-            <input type="text" id="eventCreatedBy" required>
+            <input type="hidden" id="eventCreatedBy"> <!-- Hidden input to store createdBy -->
 
             <button type="submit">Create Event</button>
         </form>
@@ -82,6 +81,10 @@
     </div>
 
     <script>
+        // Assuming you have a way to get the logged-in user's username
+        const loggedInUser = "adminUsername"; // Replace this with actual logged-in user retrieval logic
+        document.getElementById('eventCreatedBy').value = loggedInUser; // Set the createdBy field
+
         document.getElementById('createEventForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -90,7 +93,7 @@
                 date: document.getElementById('eventDate').value,
                 description: document.getElementById('eventDescription').value,
                 location: document.getElementById('eventLocation').value,
-                createdBy: document.getElementById('eventCreatedBy').value
+                createdBy: document.getElementById('eventCreatedBy').value // Retrieve createdBy from the hidden input
             };
 
             // Fetch request for event creation
