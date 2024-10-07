@@ -43,6 +43,36 @@
         .event p {
             margin: 5px 0;
         }
+
+        .registration-form {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .registration-form input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .registration-form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .registration-form button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -53,39 +83,87 @@
 
     <script>
         // Fetch events from the backend
-       // Fetch all events (no username provided)
-fetch('http://localhost:8082/events') // Adjust endpoint as necessary
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
+        fetch('http://localhost:8082/events') // Adjust endpoint as necessary
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json(); // Assuming the response is in JSON format
+            })
+            .then(events => {
+                const eventsList = document.getElementById('eventsList');
+
+                if (events.length === 0) {
+                    eventsList.innerHTML = '<p>No events available at this time.</p>';
+                } else {
+                    events.forEach(event => {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.classList.add('event');
+
+                        eventDiv.innerHTML = `
+                            <h2>${event.title}</h2>
+                            <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
+                            <p><strong>Description:</strong> ${event.description}</p>
+                            <button onclick="toggleRegistrationForm(${event.id})">Register</button>
+                            <div class="registration-form" id="registration-form-${event.id}">
+                                <h3>Register for ${event.title}</h3>
+                                <input type="text" id="name-${event.id}" placeholder="Your Name" required />
+                                <input type="email" id="email-${event.id}" placeholder="Your Email" required />
+                                <input type="tel" id="phone-${event.id}" placeholder="Your Phone Number" required />
+                                <button onclick="registerForEvent(${event.id})">Submit Registration</button>
+                                <p id="registration-result-${event.id}"></p>
+                            </div>
+                        `;
+
+                        eventsList.appendChild(eventDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching events:', error);
+                document.getElementById('eventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+            });
+
+        // Function to toggle the registration form for the selected event
+        function toggleRegistrationForm(eventId) {
+            const form = document.getElementById(`registration-form-${eventId}`);
+            form.style.display = form.style.display === 'block' ? 'none' : 'block'; // Toggle visibility
         }
-        return response.json(); // Assuming the response is in JSON format
-    })
-    .then(events => {
-        const eventsList = document.getElementById('eventsList');
 
-        if (events.length === 0) {
-            eventsList.innerHTML = '<p>No events available at this time.</p>';
-        } else {
-            events.forEach(event => {
-                const eventDiv = document.createElement('div');
-                eventDiv.classList.add('event');
+        // Function to handle registration for an event
+        function registerForEvent(eventId) {
+            const name = document.getElementById(`name-${eventId}`).value;
+            const email = document.getElementById(`email-${eventId}`).value;
+            const phone = document.getElementById(`phone-${eventId}`).value;
 
-                eventDiv.innerHTML = `
-                    <h2>${event.name}</h2>
-                    <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
-                    <p><strong>Description:</strong> ${event.description}</p>
-                `;
-                
-                eventsList.appendChild(eventDiv);
+            const registrationData = {
+                name: name,
+                email: email,
+                phonenumber: phone,
+                eventId: eventId
+            };
+
+            fetch('http://localhost:8083/register', { // Adjust endpoint as necessary
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(registrationData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text(); // Assuming the response is plain text
+            })
+            .then(result => {
+                document.getElementById(`registration-result-${eventId}`).innerText = result;
+            })
+            .catch(error => {
+                console.error('Error registering for event:', error);
+                document.getElementById(`registration-result-${eventId}`).innerText = `Error: ${error.message}`;
             });
         }
-    })
-    .catch(error => {
-        console.error('Error fetching events:', error);
-        document.getElementById('eventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
-    });
-
     </script>
 </body>
 </html>
