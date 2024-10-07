@@ -55,7 +55,7 @@
             border-radius: 4px;
             padding: 10px;
             margin-bottom: 10px;
-            cursor: pointer; /* Change cursor to pointer */
+            cursor: pointer;
         }
 
         .event h3 {
@@ -69,7 +69,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: #f9f9f9;
-            display: none; /* Hidden by default */
+            display: none;
         }
     </style>
 </head>
@@ -118,7 +118,7 @@
 
                             // Add click event listener to fetch registration details
                             eventDiv.onclick = () => {
-                                fetchRegistrations(event.id);
+                                fetchRegistrations(event.id, eventDiv);
                             };
 
                             eventList.appendChild(eventDiv);
@@ -133,8 +133,8 @@
         }
 
         // Fetch registered users for the selected event
-        function fetchRegistrations(eventId) {
-            fetch(`http://localhost:8083/registrations?eventId=${eventId}`) // Adjust endpoint as necessary
+        function fetchRegistrations(eventId, eventDiv) {
+            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
@@ -147,33 +147,26 @@
                     const registrationDetails = document.createElement('div');
                     registrationDetails.classList.add('registration-details');
 
-                    // Check if registrations is an array
-                    if (Array.isArray(registrations)) {
-                        if (registrations.length === 0) {
-                            registrationDetails.innerHTML = '<p>No users registered for this event yet.</p>';
-                        } else {
-                            registrationDetails.innerHTML = '<h4>Registered Users:</h4>';
-                            registrations.forEach(reg => {
-                                registrationDetails.innerHTML += `
-                                    <p><strong>Name:</strong> ${reg.name}<br>
-                                       <strong>Email:</strong> ${reg.email}<br>
-                                       <strong>Phone:</strong> ${reg.phonenumber}</p>
-                                `;
-                            });
-                        }
+                    if (registrations.length === 0) {
+                        registrationDetails.innerHTML = '<p>No users registered for this event yet.</p>';
                     } else {
-                        registrationDetails.innerHTML = '<p>Error: Registration data is not in the expected format.</p>';
+                        registrationDetails.innerHTML = '<h4>Registered Users:</h4>';
+                        registrations.forEach(reg => {
+                            registrationDetails.innerHTML += `
+                                <p><strong>Name:</strong> ${reg.name}<br>
+                                   <strong>Email:</strong> ${reg.email}<br>
+                                   <strong>Phone:</strong> ${reg.phonenumber}</p>
+                            `;
+                        });
                     }
 
-                    // Append registration details to the clicked event
-                    const eventDiv = document.querySelector(`.event:nth-child(${eventId})`);
-                    if (eventDiv) {
-                        const existingDetails = eventDiv.querySelector('.registration-details');
-                        if (existingDetails) {
-                            existingDetails.remove(); // Remove existing details if they exist
-                        }
-                        eventDiv.appendChild(registrationDetails);
+                    // Show the registration details below the event
+                    const existingDetails = eventDiv.querySelector('.registration-details');
+                    if (existingDetails) {
+                        existingDetails.remove(); // Remove existing details if they exist
                     }
+                    eventDiv.appendChild(registrationDetails);
+                    registrationDetails.style.display = 'block'; // Ensure it shows
                 })
                 .catch(error => {
                     console.error('Error fetching registrations:', error);
