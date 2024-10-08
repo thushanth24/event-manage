@@ -1,50 +1,49 @@
 import ballerina/http;
 
+
 // Define a function to set CORS headers
 function setCorsHeaders(http:Caller caller, http:Response res) returns error? {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     return caller->respond(res);
 }
 
-// Service listens on port 8082 for "/events" path
 service /events on new http:Listener(8082) {
 
-    // Resource to handle the POST request to create a new event
+    // POST to create a new event
     resource function post .(@http:Payload EventRecord newEvent, http:Caller caller) returns error? {
-        int|error result = createEvent(newEvent); // Call the function to create an event
+        int|error result = createEvent(newEvent);
 
         http:Response res = new;
         if result is int {
             res.setTextPayload("Event created with ID: " + result.toString());
         } else {
             res.setTextPayload("Failed to create event: " + result.toString());
-            res.statusCode = 500; // Set status to Internal Server Error if creating event fails
+            res.statusCode = 500;
         }
 
-        // CORS headers
-        check setCorsHeaders(caller, res);
+         // CORS headers for development
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-        // Send the response
+        check setCorsHeaders(caller, res);
         return;
     }
 
-    // Resource to handle the GET request to retrieve all events or events created by a specific user
+    // GET to retrieve events (by user or all)
     resource function get .(http:Caller caller, string? username) returns error? {
         EventRecord[]|error eventsResult;
 
         if username is string {
-            // If username is provided, get events for that user
             eventsResult = getEventsByUser(username);
         } else {
-            // If no username is provided, get all events
             eventsResult = getAllEvents();
         }
 
         http:Response res = new;
         if eventsResult is EventRecord[] {
-            // Create a JSON array from the EventRecord array
             json[] jsonResponse = [];
             foreach EventRecord event in eventsResult {
                 json eventJson = {
@@ -55,22 +54,84 @@ service /events on new http:Listener(8082) {
                     location: event.location,
                     createdBy: event.createdBy
                 };
-                jsonResponse.push(eventJson); // Use push to add to the array
+                jsonResponse.push(eventJson);
             }
-            res.setJsonPayload(jsonResponse); // Set the JSON response
+            res.setJsonPayload(jsonResponse);
         } else {
             res.setTextPayload("Failed to retrieve events: " + eventsResult.toString());
-            res.statusCode = 500; // Set status to Internal Server Error if retrieving events fails
+            res.statusCode = 500;
         }
 
-        // CORS headers
-        check setCorsHeaders(caller, res);
+         // CORS headers for development
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-        // Send the response
+        check setCorsHeaders(caller, res);
         return;
     }
 
-    // Handling preflight OPTIONS requests for CORS
+    // PUT to update an event
+resource function put .(@http:Payload EventRecord updatedEvent, http:Caller caller) returns error? {
+    boolean|error result = updateEvent(updatedEvent);
+
+    http:Response res = new;
+    if result is boolean {
+        if result {
+            res.setTextPayload("Event updated successfully");
+        } else {
+            res.setTextPayload("Event not found");
+            res.statusCode = 404; // Set status to Not Found if event doesn't exist
+        }
+    } else if result is error {
+        res.setTextPayload("Failed to update event: " + result.toString());
+        res.statusCode = 500; // Set status to Internal Server Error if updating event fails
+    }
+
+     // CORS headers for development
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    // CORS headers
+    check setCorsHeaders(caller, res);
+
+    // Send the response
+    return;
+}
+
+
+    // DELETE to remove an event by ID
+resource function delete .(int eventId, http:Caller caller) returns error? {
+    boolean|error result = deleteEvent(eventId);
+
+    http:Response res = new;
+    if result is boolean {
+        if result {
+            res.setTextPayload("Event deleted successfully");
+        } else {
+            res.setTextPayload("Event not found");
+            res.statusCode = 404; // Set status to Not Found if event doesn't exist
+        }
+    } else if result is error {
+        res.setTextPayload("Failed to delete event: " + result.toString());
+        res.statusCode = 500; // Set status to Internal Server Error if deleting event fails
+    }
+
+     // CORS headers for development
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    // CORS headers
+    check setCorsHeaders(caller, res);
+
+    // Send the response
+    return;
+}
+
+
+    // OPTIONS to handle preflight requests
     resource function options .(http:Caller caller) returns error? {
         http:Response res = new;
         check setCorsHeaders(caller, res);

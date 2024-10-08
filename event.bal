@@ -65,3 +65,29 @@ isolated function getAllEvents() returns EventRecord[]|error {
     check resultStream.close();
     return events;
 }
+
+// Function to delete an event by ID
+isolated function deleteEvent(int eventId) returns boolean|error {
+    sql:ExecutionResult result = check eventDbClient->execute(`DELETE FROM events WHERE id = ${eventId}`);
+    if result.affectedRowCount > 0 {
+        return true; // Return true if the event was successfully deleted
+    } else {
+        return false; // Return false if no rows were affected (event not found)
+    }
+}
+
+// Function to update an event by ID
+isolated function updateEvent(EventRecord updatedEvent) returns boolean|error {
+    sql:ExecutionResult result = check eventDbClient->execute(`
+        UPDATE events 
+        SET title = ${updatedEvent.title}, description = ${updatedEvent.description}, 
+            date = ${updatedEvent.date}, location = ${updatedEvent.location}, 
+            createdBy = ${updatedEvent.createdBy}
+        WHERE id = ${updatedEvent.id}
+    `);
+    if result.affectedRowCount > 0 {
+        return true; // Return true if the event was successfully updated
+    } else {
+        return false; // Return false if no rows were affected (event not found)
+    }
+}

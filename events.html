@@ -6,79 +6,171 @@
     <title>Available Events</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            flex-direction: column;
-            padding: 20px;
+            align-items: center;
         }
 
         .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
+            background: linear-gradient(145deg, #ffffff, #f1f1f1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            height: 90%;
+            overflow-y: auto;
         }
 
         h1 {
             margin: 0 0 20px;
             text-align: center;
+            color: #0277bd;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        /* Grid layout for events */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .event {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 10px;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f1f8e9;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .event:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
         }
 
         .event h2 {
             margin: 0;
-            font-size: 1.2em;
+            font-size: 1.5em;
+            color: #388e3c;
+            text-transform: uppercase;
         }
 
         .event p {
-            margin: 5px 0;
+            margin: 10px 0;
+            color: #4e342e;
+        }
+
+        .event button {
+            background-color: #ffb74d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .event button:hover {
+            background-color: #ffa726;
         }
 
         .registration-form {
             display: none; /* Hidden by default */
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
+            margin-top: 15px;
+            padding: 20px;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            background-color: #e1f5fe;
+        }
+
+        /* Full-page registration form style */
+        .registration-active {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .registration-form-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .registration-form h3 {
+            color: #0277bd;
+            margin-bottom: 10px;
         }
 
         .registration-form input {
             width: 100%;
-            margin: 5px 0;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #64b5f6;
+            border-radius: 6px;
+            background-color: white;
+        }
+
+        .registration-form input:focus {
+            border-color: #1e88e5;
+            outline: none;
         }
 
         .registration-form button {
-            background-color: #4CAF50;
+            background-color: #4caf50;
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
         }
 
         .registration-form button:hover {
-            background-color: #45a049;
+            background-color: #43a047;
         }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff5252;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Available Events</h1>
-        <div id="eventsList"></div>
+        <div id="eventsList" class="events-grid"></div>
+    </div>
+
+    <!-- Hidden div for registration forms -->
+    <div id="registrationContainer" class="registration-active" style="display:none;">
+        <div id="registrationContent" class="registration-form-content">
+            <button class="close-btn" onclick="closeRegistration()">X</button>
+            <!-- The registration form content will be dynamically injected here -->
+        </div>
     </div>
 
     <script>
@@ -104,15 +196,7 @@
                             <h2>${event.title}</h2>
                             <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
                             <p><strong>Description:</strong> ${event.description}</p>
-                            <button onclick="toggleRegistrationForm(${event.id})">Register</button>
-                            <div class="registration-form" id="registration-form-${event.id}">
-                                <h3>Register for ${event.title}</h3>
-                                <input type="text" id="name-${event.id}" placeholder="Your Name" required />
-                                <input type="email" id="email-${event.id}" placeholder="Your Email" required />
-                                <input type="tel" id="phone-${event.id}" placeholder="Your Phone Number" required />
-                                <button onclick="registerForEvent(${event.id})">Submit Registration</button>
-                                <p id="registration-result-${event.id}"></p>
-                            </div>
+                            <button onclick="showRegistrationForm(${event.id}, '${event.title}')">Register</button>
                         `;
 
                         eventsList.appendChild(eventDiv);
@@ -124,10 +208,30 @@
                 document.getElementById('eventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
             });
 
-        // Function to toggle the registration form for the selected event
-        function toggleRegistrationForm(eventId) {
-            const form = document.getElementById(`registration-form-${eventId}`);
-            form.style.display = form.style.display === 'block' ? 'none' : 'block'; // Toggle visibility
+        // Show registration form and hide other events
+        function showRegistrationForm(eventId, eventTitle) {
+            const registrationContainer = document.getElementById('registrationContainer');
+            const registrationContent = document.getElementById('registrationContent');
+            
+            // Inject form HTML
+            registrationContent.innerHTML = `
+                <button class="close-btn" onclick="closeRegistration()">X</button>
+                <h3>Register for ${eventTitle}</h3>
+                <input type="text" id="name-${eventId}" placeholder="Your Name" required />
+                <input type="email" id="email-${eventId}" placeholder="Your Email" required />
+                <input type="tel" id="phone-${eventId}" placeholder="Your Phone Number" required />
+                <button onclick="registerForEvent(${eventId})">Submit Registration</button>
+                <p id="registration-result-${eventId}"></p>
+            `;
+            
+            // Show registration form
+            registrationContainer.style.display = 'flex';
+        }
+
+        // Close registration form and show events again
+        function closeRegistration() {
+            const registrationContainer = document.getElementById('registrationContainer');
+            registrationContainer.style.display = 'none';
         }
 
         // Function to handle registration for an event
@@ -160,7 +264,7 @@
                 document.getElementById(`registration-result-${eventId}`).innerText = result;
             })
             .catch(error => {
-                console.error('Error registering for event:', error);
+                console.error('Error during registration:', error);
                 document.getElementById(`registration-result-${eventId}`).innerText = `Error: ${error.message}`;
             });
         }
