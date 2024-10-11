@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Management</title>
+    <link rel="icon" href="/Images/userIcon.png">
+    <title>Users</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: url('/Images/index.jpg') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,17 +19,45 @@
         }
 
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 30%;
+            height: 60%;
             text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        h1, h2 {
+        .createAccountCont {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 35%;
+            height: 85%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+        }
+
+        .divider1 {
+            color: #7f7b7b;
+        }
+
+        h1,
+        h2 {
             margin: 0;
             padding-bottom: 20px;
+            background: linear-gradient(45deg,#ff9f05,#329044, #f5f9f5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
         }
 
         label {
@@ -35,101 +66,172 @@
         }
 
         input {
-            width: 100%;
+            color: inherit;
+            width: 60%;
             padding: 8px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #6480dd;
+            padding-left: 1.8rem;
+            font-size: 15px;
+        }
+
+        .input-group {
+            padding: 1% 0;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            color: #0e0434;
+        }
+
+        input:focus {
+            background-color: transparent;
+            outline: transparent;
+            border-bottom: 2px solid hsl(152, 94%, 14%);
+        }
+
+        input::placeholder {
+            color: transparent;
+        }
+
+        label {
+            color: rgb(42, 2, 84);
+            position: relative;
+            left: 1.0rem;
+            top: 1.3rem;
+            cursor: auto;
+            transition: 0.3s ease all;
+        }
+
+        input:focus~label,
+        input:not(:placeholder-shown)~label {
+            top: -3em;
+            color: rgb(42, 2, 84);
+            font-size: 15px;
         }
 
         button {
-            width: 100%;
+            width: 60%;
             padding: 10px;
-            background-color: #28a745;
+            margin: 2%;
+            background: linear-gradient(45deg, #432f85, #1b07a0);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 25px;
             cursor: pointer;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         button:hover {
-            background-color: #218838;
+            background: linear-gradient(45deg, #069422, #033801);
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
 
         #responseMessage {
             margin-top: 10px;
-            color: red;
+            color: rgb(214, 30, 30);
         }
 
         #createAccountContainer {
-            display: none; /* Initially hide the create account form */
+            display: none;
+            /* Initially hide the create account form */
         }
     </style>
 </head>
+
 <body>
     <div class="container" id="mainContainer">
-        <h1>Welcome</h1>
-        <h2>Select your role:</h2>
-        <button id="adminButton">Admin</button>
-        <button id="userButton">User</button>
+        <h1>Hey there!</h1>
+        <h2>Continue as</h2>
+        <div>
+            <img src="/Images/adminImage.png"><br>
+            <button id="adminButton">Admin</button>
+        </div>
+        <div>
+            <img src="/Images/userImage.png"><br>
+            <button id="userButton">User</button>
+        </div>
     </div>
 
     <div class="container" id="adminContainer" style="display: none;">
-        <h1>Admin Login</h1>
+        <h1>Login as a Administrator</h1>
         <form id="adminLoginForm">
-            <label for="adminUsername">Username:</label>
-            <input type="text" id="adminUsername" required>
+            <div class="input-group">
+                <label for="adminUsername">Username:</label>
+                <input type="text" id="adminUsername" required>
+            </div>
 
-            <label for="adminPassword">Password:</label>
-            <input type="password" id="adminPassword" required>
+            <div class="input-group">
+                <label for="adminPassword">Password:</label>
+                <input type="password" id="adminPassword" required>
+            </div>
 
             <button type="submit">Login</button>
         </form>
-        <p id="adminResponseMessage"></p>
-        
+        <p class="divider1">----------------------------------------------------------------------</p>
+
+        <p style="color: aliceblue;">New administrator ?</p>
         <button id="createAccountButton">Create Account</button> <!-- Create Account button -->
+        <p id="adminResponseMessage"></p>
     </div>
 
-    <div class="container" id="createAccountContainer" style="display: none;">
-        <h1>Create Account</h1>
+    <div class="createAccountCont" id="createAccountContainer" style="display: none;">
+        <h1>Create an Account</h1>
         <form id="createAccountForm">
-            <label for="firstname">First Name:</label>
-            <input type="text" id="firstname" required>
+            <div class="input-group">
+                <label for="firstname">First Name:</label>
+                <input type="text" id="firstname" placeholder="First Name" required>
+            </div>
 
-            <label for="lastname">Last Name:</label>
-            <input type="text" id="lastname" required>
+            <div class="input-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" id="lastname" placeholder="Last Name" required>
+            </div>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" required>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" required>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="User Name" required>
+            </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" required>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="*********" required>
+            </div>
 
-            <label for="phonenumber">Phone Number:</label>
-            <input type="text" id="phonenumber" required>
+            <div class="input-group">
+                <label for="phonenumber">Phone Number:</label>
+                <input type="text" id="phonenumber" placeholder="Phone Number" required>
+            </div>
 
             <button type="submit">Create Account</button>
         </form>
         <p id="responseMessage"></p>
-        <button id="backToLoginButton">Back to Login</button> <!-- Back to Login button -->
+        <button class="backToLoginButton" id="backToLoginButton">Back to Login</button> <!-- Back to Login button -->
     </div>
 
     <script>
-        document.getElementById('adminButton').addEventListener('click', function() {
+        document.getElementById('adminButton').addEventListener('click', function () {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('adminContainer').style.display = 'block';
         });
 
-        document.getElementById('userButton').addEventListener('click', function() {
+        document.getElementById('userButton').addEventListener('click', function () {
             // Redirect to the events page for users
             window.location.href = 'events.html';
         });
 
         // Admin login form submission
-        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+        document.getElementById('adminLoginForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent default form submission
 
             const adminCredentials = {
@@ -138,43 +240,43 @@
             };
 
             // Fetch request for login
-            fetch('http://localhost:8081/login', { // Adjust endpoint if necessary
+            fetch('http://localhost:8081/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(adminCredentials)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.text(); // Assuming the response is text
-            })
-            .then(data => {
-                document.getElementById('adminResponseMessage').textContent = `Login successful: ${data}`;
-                // Redirect to the event creation dashboard
-                window.location.href = 'dashboard.html'; // Adjust this to your actual admin dashboard page
-            })
-            .catch(error => {
-                document.getElementById('adminResponseMessage').textContent = `Error: ${error.message}`;
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.text(); // Assuming the response is text
+                })
+                .then(data => {
+                    document.getElementById('adminResponseMessage').textContent = `Login successful: ${data}`;
+                    // Redirect to the event creation dashboard
+                    window.location.href = 'dashboard.html'; // Adjust this to your actual admin dashboard page
+                })
+                .catch(error => {
+                    document.getElementById('adminResponseMessage').textContent = `Error: ${error.message}`;
+                });
         });
 
         // Handle creating account button click
-        document.getElementById('createAccountButton').addEventListener('click', function() {
+        document.getElementById('createAccountButton').addEventListener('click', function () {
             document.getElementById('adminContainer').style.display = 'none';
             document.getElementById('createAccountContainer').style.display = 'block';
         });
 
         // Handle back to login button click
-        document.getElementById('backToLoginButton').addEventListener('click', function() {
+        document.getElementById('backToLoginButton').addEventListener('click', function () {
             document.getElementById('createAccountContainer').style.display = 'none';
             document.getElementById('adminContainer').style.display = 'block';
         });
 
         // Create account form submission
-        document.getElementById('createAccountForm').addEventListener('submit', function(event) {
+        document.getElementById('createAccountForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent default form submission
 
             const newUser = {
@@ -194,20 +296,21 @@
                 },
                 body: JSON.stringify(newUser)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.text(); // Assuming the response is text
-            })
-            .then(data => {
-                document.getElementById('responseMessage').textContent = `User added with ID: ${data}`;
-                document.getElementById('createAccountForm').reset(); // Reset the form after successful submission
-            })
-            .catch(error => {
-                document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.text(); // Assuming the response is text
+                })
+                .then(data => {
+                    document.getElementById('responseMessage').textContent = `User added with ID: ${data}`;
+                    document.getElementById('createAccountForm').reset(); // Reset the form after successful submission
+                })
+                .catch(error => {
+                    document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
+                });
         });
     </script>
 </body>
+
 </html>
