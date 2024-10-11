@@ -240,6 +240,9 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    
     <script>
         // Fetch events from the backend
         fetch('http://localhost:8082/events') // Adjust endpoint as necessary
@@ -300,6 +303,7 @@
                 <button onclick="registerForEvent(${eventId})">Register</button>
                 </div>
                 <p id="registration-result-${eventId}"></p>
+                <div id="qrcode-${eventId}"></div>
             `;
 
             // Show registration form
@@ -340,6 +344,15 @@
                 })
                 .then(result => {
                     document.getElementById(`registration-result-${eventId}`).innerText = result;
+                       // Generate QR code
+                const qrCodeContainer = document.getElementById(`qrcode-${eventId}`);
+                qrCodeContainer.innerHTML = ""; // Clear previous QR code
+                $(qrCodeContainer).qrcode({ width: 100, height: 100, text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}` });
+
+                // Clear form inputs after successful registration
+                document.getElementById(`name-${eventId}`).value = '';
+                document.getElementById(`email-${eventId}`).value = '';
+                document.getElementById(`phone-${eventId}`).value = '';
                 })
                 .catch(error => {
                     console.error('Error during registration:', error);
