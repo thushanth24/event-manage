@@ -1,14 +1,6 @@
 import ballerina/http;
 
 
-// Define a function to set CORS headers
-function setCorsHeaders(http:Caller caller, http:Response res) returns error? {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    return caller->respond(res);
-}
-
 service /events on new http:Listener(8082) {
 
     // POST to create a new event
@@ -23,13 +15,13 @@ service /events on new http:Listener(8082) {
             res.statusCode = 500;
         }
 
-         // CORS headers for development
+         // CORS headers
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-        check setCorsHeaders(caller, res);
-        return;
+        // Send response
+        check caller->respond(res);
     }
 
     // GET to retrieve events (by user or all)
@@ -62,50 +54,46 @@ service /events on new http:Listener(8082) {
             res.statusCode = 500;
         }
 
-         // CORS headers for development
+        // CORS headers
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-        check setCorsHeaders(caller, res);
-        return;
+        // Send response
+        check caller->respond(res);
     }
 
     // PUT to update an event
-resource function put .(@http:Payload EventRecord updatedEvent, http:Caller caller) returns error? {
-    boolean|error result = updateEvent(updatedEvent);
+    resource function put .(@http:Payload EventRecord updatedEvent, http:Caller caller) returns error? {
+        boolean|error result = updateEvent(updatedEvent);
 
-    http:Response res = new;
-    if result is boolean {
-        if result {
-            res.setTextPayload("Event updated successfully");
-        } else {
-            res.setTextPayload("Event not found");
-            res.statusCode = 404; // Set status to Not Found if event doesn't exist
+        http:Response res = new;
+        if result is boolean {
+            if result {
+                res.setTextPayload("Event updated successfully");
+            } else {
+                res.setTextPayload("Event not found");
+                res.statusCode = 404; // Set status to Not Found if event doesn't exist
+            }
+        } else if result is error {
+            res.setTextPayload("Failed to update event: " + result.toString());
+            res.statusCode = 500; // Set status to Internal Server Error if updating event fails
         }
-    } else if result is error {
-        res.setTextPayload("Failed to update event: " + result.toString());
-        res.statusCode = 500; // Set status to Internal Server Error if updating event fails
-    }
 
-     // CORS headers for development
+         // CORS headers
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // CORS headers
-    check setCorsHeaders(caller, res);
-
-    // Send the response
-    return;
-}
-
+        // Send response
+        check caller->respond(res);
+    }
 
     // DELETE to remove an event by ID
-resource function delete .(int eventId, http:Caller caller) returns error? {
+resource function delete .(http:Caller caller, int eventId) returns error? {
     boolean|error result = deleteEvent(eventId);
-
     http:Response res = new;
+
     if result is boolean {
         if result {
             res.setTextPayload("Event deleted successfully");
@@ -113,28 +101,32 @@ resource function delete .(int eventId, http:Caller caller) returns error? {
             res.setTextPayload("Event not found");
             res.statusCode = 404; // Set status to Not Found if event doesn't exist
         }
-    } else if result is error {
+    } else {
         res.setTextPayload("Failed to delete event: " + result.toString());
-        res.statusCode = 500; // Set status to Internal Server Error if deleting event fails
+        res.statusCode = 500; // Set status to Internal Server Error if deletion fails
     }
 
-     // CORS headers for development
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
     // CORS headers
-    check setCorsHeaders(caller, res);
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // Send the response
-    return;
+    // Send response
+    check caller->respond(res);
 }
 
 
-    // OPTIONS to handle preflight requests
+
+    // Handle OPTIONS preflight request
     resource function options .(http:Caller caller) returns error? {
         http:Response res = new;
-        check setCorsHeaders(caller, res);
-        return;
+
+        // Set CORS headers for preflight requests
+        res.setHeader("Access-Control-Allow-Origin",  "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        // Respond to preflight request
+        check caller->respond(res);
     }
 }
