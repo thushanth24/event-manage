@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Events</title>
+    <title>Events</title>
+    <link rel="icon" href="/Images/eventIcon.png">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -28,6 +29,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            scroll-behavior: smooth;
         }
 
         h1 {
@@ -36,6 +38,14 @@
             color: #ffffff;
             font-size: 2.5em;
             font-weight: bold;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+            padding: 10px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
         }
 
         /* Grid layout for events */
@@ -67,9 +77,18 @@
         .event h2 {
             margin: 0;
             font-size: 1.5em;
-            color: #388e3c;
+            color: #620a67;
             text-align: center;
             text-transform: uppercase;
+        }
+
+        .miniFormTitle h3 {
+            font-size: 1.5em;
+            background: linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(76, 3, 105) 41.6%, rgb(3, 50, 74) 93.4%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
         }
 
         .event p {
@@ -90,21 +109,11 @@
         }
 
         .event button:hover {
-            background: linear-gradient(45deg, #88ce8a, #069422, #033801);
+            background: linear-gradient(45deg, #59b85c, #04731a, #033801);
             transform: scale(1.08);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
             color: #dfefe0;
 
-        }
-
-        .registration-form {
-            display: none;
-            /* Hidden by default */
-            margin-top: 15px;
-            padding: 20px;
-            border: 1px solid #90caf9;
-            border-radius: 8px;
-            background-color: #4093ba;
         }
 
         /* Full-page registration form style */
@@ -122,9 +131,10 @@
         }
 
         .registration-form-content {
-            background: url(/Images/miniFormTexture.jpg);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             background-size: cover;
-            /* Ensure the image covers the entire area */
             background-position: center;
             padding: 30px;
             margin: 10%;
@@ -135,48 +145,38 @@
             position: relative;
         }
 
-        .registration-form h3 {
-            color: #bd0202;
-            margin-bottom: 10px;
-        }
-
-        .registration-form input {
-            width: 100%;
-            margin: 50%;
-            padding: 10px;
-            border: 2px solid #64b5f6;
-            border-radius: 25px;
-            background-color: rgb(16, 10, 120);
-        }
-
-        .registration-form input:focus {
-            border-color: #e51e1e;
-            outline: none;
-        }
-
-        .registration-form button {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .registration-form button:hover {
-            background-color: #43a047;
+        .registration-form-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url(/Images/miniFormTexture.jpg);
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            z-index: -1;
+            border-radius: 20px;
         }
 
         .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: linear-gradient(#e51e1e, #660404);
+            background: linear-gradient(#6b0c0c, #3a0202);
             border: none;
-            color: rgb(171, 163, 163);
+            color: rgb(212, 205, 205);
             padding: 5px 10px;
-            border-radius: 80%;
+            border-radius: 100%;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.08);
+            color: gray;
+
         }
 
         .miniFormInput {
@@ -193,7 +193,7 @@
             height: 5px;
             padding: 12px;
             margin: 5%;
-            border: 2px solid #3966b8;
+            border: 2px solid #2d6898;
             border-radius: 25px;
             background-color: rgb(255, 255, 255);
             font-size: 1em;
@@ -202,7 +202,7 @@
         }
 
         .miniFormInput input:focus {
-            border-color: #021c2b;
+            border-color: #0db31d;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             outline: none;
         }
@@ -216,12 +216,13 @@
             border-radius: 25px;
             font-size: 0.7em;
             cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .miniFormInput button:hover {
-            background: linear-gradient(45deg, #083e0a, #069422, #033801);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #61c864, #046818, #033801);
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -242,7 +243,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-    
+
     <script>
         // Fetch events from the backend
         fetch('http://localhost:8082/events') // Adjust endpoint as necessary
@@ -286,7 +287,7 @@
 
             // Inject form HTML
             registrationContent.innerHTML = `
-                <button class="close-btn" onclick="closeRegistration()">X</button>
+                <button class="close-btn" onclick="closeRegistration()">x</button>
                 <div class="miniFormTitle">
                 <h3>Register for ${eventTitle}</h3>
                 </div>
@@ -300,10 +301,16 @@
                 <input type="tel" id="phone-${eventId}" placeholder="Your Phone Number" required /><br>
                 </div>
                 <div class="miniFormInput">
+                <input type="text" id="nic-${eventId}" placeholder="Your NIC" required /><br>
+                </div>
+                <div class="miniFormInput">
                 <button onclick="registerForEvent(${eventId})">Register</button>
                 </div>
                 <p id="registration-result-${eventId}"></p>
-                <div id="qrcode-${eventId}"></div>
+                <p>-------------------------------------------------------</p>
+                <div class="miniFormInput">
+                <div class="miniForQr" id="qrcode-${eventId}"></div>
+                </div>
             `;
 
             // Show registration form
@@ -321,11 +328,13 @@
             const name = document.getElementById(`name-${eventId}`).value;
             const email = document.getElementById(`email-${eventId}`).value;
             const phone = document.getElementById(`phone-${eventId}`).value;
+            const nic = document.getElementById(`nic-${eventId}`).value;
 
             const registrationData = {
                 name: name,
                 email: email,
                 phonenumber: phone,
+                nic: nic, //Added NIC Field
                 eventId: eventId
             };
 
@@ -337,27 +346,52 @@
                 body: JSON.stringify(registrationData),
             })
                 .then(response => {
+                        if(response.status === 409) {
+                            throw new Error('This NIC number is already registered for this event.');
+                        }
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
                     }
                     return response.text(); // Assuming the response is plain text
                 })
                 .then(result => {
-                    document.getElementById(`registration-result-${eventId}`).innerText = result;
-                       // Generate QR code
-                const qrCodeContainer = document.getElementById(`qrcode-${eventId}`);
-                qrCodeContainer.innerHTML = ""; // Clear previous QR code
-                $(qrCodeContainer).qrcode({ width: 100, height: 100, text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}` });
-
-                // Clear form inputs after successful registration
-                document.getElementById(`name-${eventId}`).value = '';
-                document.getElementById(`email-${eventId}`).value = '';
-                document.getElementById(`phone-${eventId}`).value = '';
+                    // Show the confirmation view
+                    showConfirmationView(eventId, name, email, phone, result);
                 })
                 .catch(error => {
                     console.error('Error during registration:', error);
                     document.getElementById(`registration-result-${eventId}`).innerText = `Error: ${error.message}`;
                 });
+        }
+
+        // Function to show confirmation view
+        function showConfirmationView(eventId, name, email, phone, result) {
+            const registrationContainer = document.getElementById('registrationContainer');
+            const registrationContent = document.getElementById('registrationContent');
+
+            // Inject confirmation HTML
+            registrationContent.innerHTML = `
+        <button class="close-btn" onclick="closeRegistration()">x</button>
+        <div class="miniFormTitle">
+            <h3>Thank You for Registering!</h3>
+        </div>
+        <div class="miniFormInput">
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Event Date:</strong> ${new Date().toLocaleDateString()}</p>
+            <p><strong>Message:</strong> ${result}</p>
+        </div>
+        <div class="miniFormInput">
+            <div class="miniFormQr" id="qrcode-${eventId}"></div>
+        </div>
+    `;
+
+            // Generate the QR code with the provided information
+            const qrCodeContainer = document.getElementById(`qrcode-${eventId}`);
+            qrCodeContainer.innerHTML = ""; // Clear previous QR code
+            $(qrCodeContainer).qrcode({ width: 150, height: 150, text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nNIC: ${nic}` });
+
+            // Show the confirmation content
+            registrationContainer.style.display = 'flex';
         }
     </script>
 </body>
