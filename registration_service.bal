@@ -11,9 +11,17 @@ service /register on new http:Listener(8083) {
         if result is int {
             res.setTextPayload("Registration successful with ID: " + result.toString());
             res.statusCode = 200; // Set status to OK
-        } else {
-            res.setTextPayload("Failed to register: " + result.toString());
-            res.statusCode = 500; // Set status to Internal Server Error if registration fails
+        } else if result is error {
+            // Check if the error message contains "Duplicate entry"
+            string errMessage = result.toString();
+            if errMessage.includes("Duplicate entry") {
+                // Handle duplicate NIC error
+                res.setTextPayload("Failed to register: NIC already registered.");
+                res.statusCode = 409; // Conflict status code for duplicate NIC
+            } else {
+                res.setTextPayload("Failed to register: " + errMessage);
+                res.statusCode = 500; // Set status to Internal Server Error for other errors
+            }
         }
 
         // CORS headers
