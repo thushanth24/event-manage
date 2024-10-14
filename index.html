@@ -53,16 +53,11 @@
         h2 {
             margin: 0;
             padding-bottom: 20px;
-            background: linear-gradient(45deg,#ff9f05,#329044, #f5f9f5);
+            background: linear-gradient(45deg, #ff9f05, #329044, #f5f9f5);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
 
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
         }
 
         input {
@@ -82,11 +77,6 @@
             position: relative;
         }
 
-        .input-group i {
-            position: absolute;
-            color: #0e0434;
-        }
-
         input:focus {
             background-color: transparent;
             outline: transparent;
@@ -100,16 +90,17 @@
         label {
             color: rgb(42, 2, 84);
             position: relative;
-            left: 1.0rem;
-            top: 1.3rem;
+            left: 0.5rem;
+            top: 1.5rem;
             cursor: auto;
             transition: 0.3s ease all;
+            margin: 10px 0 5px;
         }
 
         input:focus~label,
         input:not(:placeholder-shown)~label {
             top: -3em;
-            color: rgb(42, 2, 84);
+            color: hsl(13, 90%, 28%);
             font-size: 15px;
         }
 

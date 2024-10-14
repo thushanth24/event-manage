@@ -6,16 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Event</title>
     <link rel="icon" href="/Images/createEventIcon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: url('/Images/event.jpg') no-repeat center center fixed;
             background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .container {
@@ -26,15 +28,26 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             width: 30%;
-            height: 65vh;
+            height: auto;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            transform: translateX(-70%);
+            position: absolute;
+            top: 10%;
+            margin-top: 4%;
+            left: 4%;
+            z-index: 1;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+
         }
 
         h1 {
             margin: 0;
             padding-bottom: 20px;
+            color: #030261;
         }
 
         label {
@@ -44,42 +57,51 @@
 
         input,
         textarea {
-            width: 80%;
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 20px;
-            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.4 ease, transform 0.4s ease, box-shadow 0.3s ease;
         }
 
-        textarea:hover {
-            transform: scale(1.03);
-            border: 1px solid #218838;
-        }
-
+        textarea:hover,
         input:hover {
             transform: scale(1.03);
-            border: 1px solid #218838;
+            border: 2px solid #180461;
         }
 
         button {
             width: 40%;
             padding: 10px;
-            margin-top: 8%;
-            background-color: #a48404;
-            color: white;
+            margin-top: 10%;
+            background: linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(5, 78, 115) 93.4%);
+            color: rgb(189, 180, 180);
             border: none;
             border-radius: 25px;
             cursor: pointer;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         button:hover {
-            background-color: #218838;
+            background: linear-gradient(45deg, #255b27, #035213, #033801);
+            transform: scale(1.08);
+            color: #fff;
+        }
+
+        #3d-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 75vw;
+            height: 100vh;
+            z-index: 0;
         }
     </style>
 </head>
 
 <body>
+    <!-- Left side: Form container -->
     <div class="container">
         <h1>Create an EVENT</h1>
         <form id="createEventForm">
@@ -101,6 +123,9 @@
         </form>
         <p id="eventResponseMessage"></p>
     </div>
+
+    <!-- Right side: Earth 3D model container -->
+    <div id="3d-container"></div>
 
     <script>
         // Assuming you have a way to get the logged-in user's username
@@ -140,7 +165,102 @@
                     document.getElementById('eventResponseMessage').textContent = `Error: ${error.message}`;
                 });
         });
+
+        // 3D Earth model setup
+        let scene, camera, renderer, controls, earth;
+
+        function init() {
+            // Load the space texture
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load('/Images/space.jpg', function (texture) {
+                // Create a large sphere geometry
+                const spaceGeometry = new THREE.SphereGeometry(1000, 64, 64);
+
+                // Create material using the space texture
+                const spaceMaterial = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    side: THREE.BackSide  // Render the texture on the inside of the sphere
+                });
+
+                // Create the sphere mesh
+                const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
+
+                // Add the space sphere to the scene
+                scene.add(spaceSphere);
+            });
+
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0d0d1f);
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 5000);
+            camera.position.set(800, 200, 1000);
+
+            // Lighting setup
+            const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x444444, 1);
+            hemisphereLight.position.set(0, 200, 0);
+            scene.add(hemisphereLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            directionalLight.position.set(100, 200, 100);
+            scene.add(directionalLight);
+
+            const ambientLight = new THREE.AmbientLight(0x333333);
+            scene.add(ambientLight);
+
+            // Spotlight at bottom-right corner
+            const spotLight = new THREE.SpotLight(0xffffff, 1.2);
+            spotLight.position.set(300, -200, 500);
+            spotLight.castShadow = true;
+            spotLight.angle = Math.PI / 6;
+            spotLight.penumbra = 0.5;
+            scene.add(spotLight);
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('3d-container').appendChild(renderer.domElement);
+
+            // OrbitControls for interaction
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
+            controls.maxPolarAngle = Math.PI / 2;
+
+            // Load the GLTF Earth model
+            let loader = new THREE.GLTFLoader();
+            loader.load('scene.gltf', function (gltf) {
+                earth = gltf.scene.children[0];
+                earth.scale.set(0.08, 0.08, 0.08);
+                earth.position.x += 320;
+                earth.position.y += 30;
+                scene.add(gltf.scene);
+                animate();
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            if (earth) {
+                earth.rotation.z += 0.002;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
     </script>
+
 </body>
 
 </html>
