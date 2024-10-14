@@ -356,7 +356,7 @@
                 })
                 .then(result => {
                     // Show the confirmation view
-                    showConfirmationView(eventId, name, email, phone, result);
+                    showConfirmationView(eventId, name, email, phone, nic, result);
                 })
                 .catch(error => {
                     console.error('Error during registration:', error);
@@ -365,34 +365,43 @@
         }
 
         // Function to show confirmation view
-        function showConfirmationView(eventId, name, email, phone, result) {
-            const registrationContainer = document.getElementById('registrationContainer');
-            const registrationContent = document.getElementById('registrationContent');
+        function showConfirmationView(eventId, name, email, phone, nic, result) {
+    const registrationContainer = document.getElementById('registrationContainer');
+    const registrationContent = document.getElementById('registrationContent');
 
-            // Inject confirmation HTML
-            registrationContent.innerHTML = `
+    // Inject confirmation HTML with the NIC field added
+    registrationContent.innerHTML = `
         <button class="close-btn" onclick="closeRegistration()">x</button>
         <div class="miniFormTitle">
             <h3>Thank You for Registering!</h3>
         </div>
         <div class="miniFormInput">
             <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
             <p><strong>Event Date:</strong> ${new Date().toLocaleDateString()}</p>
-            <p><strong>Message:</strong> ${result}</p>
         </div>
         <div class="miniFormInput">
             <div class="miniFormQr" id="qrcode-${eventId}"></div>
         </div>
     `;
 
-            // Generate the QR code with the provided information
-            const qrCodeContainer = document.getElementById(`qrcode-${eventId}`);
-            qrCodeContainer.innerHTML = ""; // Clear previous QR code
-            $(qrCodeContainer).qrcode({ width: 150, height: 150, text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nNIC: ${nic}` });
+    // Generate the QR code with all the provided information, including NIC
+    const qrCodeContainer = document.getElementById(`qrcode-${eventId}`);
+    qrCodeContainer.innerHTML = ""; // Clear any previous QR code
 
-            // Show the confirmation content
-            registrationContainer.style.display = 'flex';
-        }
+    $(qrCodeContainer).qrcode({
+        width: 150,
+        height: 150,
+        text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nNIC: ${nic}`
+    });
+
+    // Show the confirmation content
+    registrationContainer.style.display = 'flex';
+}
+
+
+
     </script>
 </body>
 
