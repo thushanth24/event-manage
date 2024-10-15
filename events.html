@@ -23,7 +23,22 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            width: 80%;
+            width: 55%;
+            height: 80%;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            scroll-behavior: smooth;
+        }
+
+        .container1 {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 25%;
+            margin-left: 20px;
             height: 80%;
             overflow-y: auto;
             backdrop-filter: blur(10px);
@@ -230,7 +245,12 @@
 <body>
     <div class="container">
         <h1>Upcoming Events</h1>
-        <div id="eventsList" class="events-grid"></div>
+        <div id="upcomingEventsList" class="events-grid"></div>
+    </div>
+
+    <div class="container1">
+        <h1>Past Events</h1>
+        <div id="pastEventsList" class="events-grid"></div>
     </div>
 
     <!-- Hidden div for registration forms -->
@@ -245,7 +265,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 
     <script>
-        // Fetch events from the backend
         fetch('http://localhost:8082/events') // Adjust endpoint as necessary
             .then(response => {
                 if (!response.ok) {
@@ -254,31 +273,66 @@
                 return response.json(); // Assuming the response is in JSON format
             })
             .then(events => {
-                const eventsList = document.getElementById('eventsList');
+                const upcomingEventsList = document.getElementById('upcomingEventsList');
+                const pastEventsList = document.getElementById('pastEventsList');
 
-                if (events.length === 0) {
-                    eventsList.innerHTML = '<p>No events available at this time.</p>';
-                } else {
-                    events.forEach(event => {
-                        const eventDiv = document.createElement('div');
-                        eventDiv.classList.add('event');
+                const today = new Date(); // Current date
 
-                        eventDiv.innerHTML = `
-                            <h2>${event.title}</h2>
-                            <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
-                            <p><strong>Location:</strong> ${event.location}</p>
-                            <p><strong>Description:</strong> ${event.description}</p>
-                            <button onclick="showRegistrationForm(${event.id}, '${event.title}')">Register</button>
-                        `;
+                let hasUpcomingEvents = false;
+                let hasPastEvents = false;
 
-                        eventsList.appendChild(eventDiv);
-                    });
+                events.forEach(event => {
+                    const eventDate = new Date(event.date);
+                    const eventDiv = document.createElement('div');
+                    eventDiv.classList.add('event');
+
+                    // Build event HTML structure
+                    eventDiv.innerHTML = `
+                <h2>${event.title}</h2>
+                <p><strong>Date:</strong> ${eventDate.toLocaleDateString()}</p>
+                <p><strong>Location:</strong> ${event.location}</p>
+                <p><strong>Description:</strong> ${event.description}</p>
+                <button id="button-${event.id}" ${eventDate < today ? 'disabled' : ''}></button>
+            `;
+
+                    // If the event is in the future (Upcoming)
+                    if (eventDate >= today) {
+                        hasUpcomingEvents = true;
+                        const button = eventDiv.querySelector(`#button-${event.id}`);
+                        button.innerText = 'Register';
+                        button.onclick = () => showRegistrationForm(event.id, event.title);
+                    }
+                    // If the event is in the past
+                    else {
+                        hasPastEvents = true;
+                        const button = eventDiv.querySelector(`#button-${event.id}`);
+                        button.innerText = 'Ended';
+                        button.style.background = 'linear-gradient(#6b0c0c, #3a0202)'; 
+                        button.style.cursor = 'not-allowed';
+                    }
+
+                    // Append to the appropriate list
+                    if (eventDate >= today) {
+                        upcomingEventsList.appendChild(eventDiv);
+                    } else {
+                        pastEventsList.appendChild(eventDiv);
+                    }
+                });
+
+                // Handle cases where there are no events
+                if (!hasUpcomingEvents) {
+                    upcomingEventsList.innerHTML = '<p>No upcoming events available.</p>';
+                }
+                if (!hasPastEvents) {
+                    pastEventsList.innerHTML = '<p>No past events available.</p>';
                 }
             })
             .catch(error => {
                 console.error('Error fetching events:', error);
-                document.getElementById('eventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+                document.getElementById('upcomingEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+                document.getElementById('pastEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
             });
+
 
         // Show registration form and hide other events
         function showRegistrationForm(eventId, eventTitle) {
@@ -346,9 +400,9 @@
                 body: JSON.stringify(registrationData),
             })
                 .then(response => {
-                        if(response.status === 409) {
-                            throw new Error('This NIC number is already registered for this event.');
-                        }
+                    if (response.status === 409) {
+                        throw new Error('This NIC number is already registered for this event.');
+                    }
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
                     }
