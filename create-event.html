@@ -47,7 +47,14 @@
         h1 {
             margin: 0;
             padding-bottom: 20px;
-            color: #030261;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: #120249;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.6),
+                /* outer glow */
+                0 0 20px rgba(255, 255, 255, 0.7),
+                /* medium glow */
+                0 0 30px rgba(255, 255, 255, 0.7);
         }
 
         label {

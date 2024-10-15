@@ -2,12 +2,13 @@ import ballerinax/mysql;
 import ballerina/sql;
 import ballerina/email;
 
-// Define a unique RegistrationRecord type
+// Define a unique RegistrationRecord type with 'nic'
 public type RegistrationRecord record {| 
     int id?;                   // Registration ID
     string name;               // User's name
     string email;              // User's email
     string phonenumber;        // User's phone number
+    string nic;                // User's NIC (unique identifier)
     int eventId;               // ID of the event registered for
 |};
 
@@ -22,7 +23,6 @@ configurable string EVENT_DB_DATABASE = ?;
 final mysql:Client registrationDbClient = check new(
     host=EVENT_DB_HOST, user=EVENT_DB_USER, password=EVENT_DB_PASSWORD, port=EVENT_DB_PORT, database=EVENT_DB_DATABASE
 );
-
 
 // Function to send registration confirmation email
 isolated function sendRegistrationEmail(RegistrationRecord registration) returns error? {
@@ -39,10 +39,11 @@ isolated function sendRegistrationEmail(RegistrationRecord registration) returns
 
 // Function to register for an event and send an email
 isolated function registerForEvent(RegistrationRecord newRegistration) returns int|error {
+    // Insert the registration data into the database, ensuring uniqueness with 'nic' + 'eventId'
     sql:ExecutionResult result = check registrationDbClient->execute(` 
-        INSERT INTO registrations (name, email, phonenumber, eventId)
+        INSERT INTO registrations (name, email, phonenumber, nic, eventId)
         VALUES (${newRegistration.name}, ${newRegistration.email}, 
-                ${newRegistration.phonenumber}, ${newRegistration.eventId})
+                ${newRegistration.phonenumber}, ${newRegistration.nic}, ${newRegistration.eventId})
     `);
 
     int|string? lastInsertId = result.lastInsertId;
@@ -51,11 +52,6 @@ isolated function registerForEvent(RegistrationRecord newRegistration) returns i
         check sendRegistrationEmail(newRegistration); // Call the email function
         return lastInsertId; // Return the ID of the newly created registration
     } else {
-        return error("Unable to obtain last insert ID");
+        return error("Unable to obtain last insert ID"); 
     }
 }
-
-
-
-
-

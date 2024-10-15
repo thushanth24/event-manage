@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,58 +8,182 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: url(/Images/manageEvent.jpg);
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             padding: 20px;
+            height: 100vh;
+            background-size: cover;
         }
 
         .container {
-            background: white;
+            background: rgba(7, 0, 35, 0.3);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 25px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
+            width: 85%;
+            height: 80%;
+            margin-top: 2%;
             text-align: center;
-        }
-
-        h1 {
-            margin: 0;
-            padding-bottom: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-bottom: 1px solid #ddd;
+            overflow-y: auto;
+            max-height: 100%;
+            display: block;
         }
 
-        th, td {
+        tbody {
+            display: block;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        .event-row {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border-radius: 25px;
+            border-bottom: 2px solid #7a0c17;
+            padding-bottom: 10px;
+        }
+
+        .event-row:not(:last-child) {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            /* Space between rows (except for the last row) */
+        }
+
+        .event-row:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        thead,
+        tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            /* Ensure the layout remains fixed */
+        }
+
+
+        h1 {
+            margin: 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th,
+        td {
             padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
+            border: 1px hidden #ddd;
+            border-radius: 1px;
+            text-align: center;
         }
 
         th {
-            background-color: #f2f2f2;
+            background: rgba(255, 255, 255, 0.3);
+            color: #444040;
+
         }
 
-        button {
+        .editButton {
             padding: 10px;
-            background-color: #dc3545;
+            background-color: #835a03;
+            color: rgb(189, 178, 178);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 95px;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .deleteButton {
+            padding: 10px;
+            background-color: #7a0c17;
+            color: rgb(144, 142, 142);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 95px;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .deleteButton:hover {
+            background-color: #c1091b;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .editButton:hover {
+            background-color: #f28d09;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .registration-details {
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        #backButton {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #432f85, #1b07a0);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 25px;
             cursor: pointer;
+            position: static;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        button:hover {
-            background-color: #c82333;
+        #backButton:hover {
+            background: linear-gradient(45deg, #00a5d3, #1b07a0);
+            transform: scale(1.08);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #registrationDetails {
+            height: 450px;
+            width: 700px;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            margin-left: 35%;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Manage Events</h1>
@@ -68,6 +193,7 @@
                     <th>Event Name</th>
                     <th>Event Date</th>
                     <th>Description</th>
+                    <th>Location</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -75,55 +201,173 @@
                 <!-- Events will be populated here -->
             </tbody>
         </table>
+        <div id="registrationDetails" class="hidden"></div>
+        <button id="backButton" class="hidden" onclick="showEventList()">Back to Events</button>
         <p id="manageResponseMessage"></p>
     </div>
 
     <script>
+        // Fetch events created by the admin
         function fetchEvents() {
-            fetch('http://localhost:8082/events') // Adjust endpoint to your API
+            const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+    
+            fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjusted to use 'username'
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
                     }
-                    return response.json(); // Assuming the response is JSON
+                    return response.json(); // Assuming the response is in JSON format
                 })
                 .then(events => {
                     const tableBody = document.getElementById('eventsTable').querySelector('tbody');
-                    tableBody.innerHTML = ''; // Clear existing table rows
-
-                    events.forEach(event => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${event.name}</td>
-                            <td>${new Date(event.date).toLocaleDateString()}</td>
-                            <td>${event.description}</td>
-                            <td><button onclick="deleteEvent('${event.id}')">Delete</button></td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
+                    tableBody.innerHTML = ''; // Clear previous events
+    
+                    if (events.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5">No events created by you yet.</td></tr>';
+                    } else {
+                        events.forEach(event => {
+                            const row = document.createElement('tr');
+                            row.classList.add('event-row');
+                            row.innerHTML = `
+                                <td>${event.title}</td>
+                                <td>${new Date(event.date).toLocaleDateString()}</td>
+                                <td>${event.description}</td>
+                                <td>${event.location}</td>
+                                <td>
+                                    <button class="editButton" onclick="editEvent(${event.id})">Edit</button>
+                                    <button class="deleteButton" onclick="deleteEvent(${event.id})">Delete</button>
+                                </td>
+                            `;
+                            row.onclick = () => {
+                                fetchRegistrations(event.id);
+                            };
+                            tableBody.appendChild(row);
+                        });
+                    }
                 })
                 .catch(error => {
                     document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
                 });
         }
-
-        function deleteEvent(eventId) {
-            fetch(`http://localhost:8082/events/${eventId}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                fetchEvents(); // Refresh the events list after deletion
-            })
-            .catch(error => {
-                document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
-            });
+    
+        // Fetch registered users for the selected event
+        function fetchRegistrations(eventId) {
+            // Hide the event table
+            document.getElementById('eventsTable').classList.add('hidden');
+            document.getElementById('backButton').classList.remove('hidden');
+    
+            // Clear the header and show "Registered Users"
+            const header = document.querySelector('.container h1');
+            header.textContent = 'Registered Users';
+    
+            // Show the selected event row registration details
+            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json(); // Assuming the response is in JSON format
+                })
+                .then(registrations => {
+                    const registrationDetails = document.getElementById('registrationDetails');
+                    registrationDetails.classList.remove('hidden');
+                    registrationDetails.innerHTML = ''; // Clear previous registration details
+    
+                    if (registrations.length === 0) {
+                        registrationDetails.innerHTML = '<p>No users registered for this event yet.</p>';
+                    } else {
+                        registrations.forEach(reg => {
+                            registrationDetails.innerHTML += `
+                                <p><strong>Name:</strong> ${reg.name}<br>
+                                   <strong>Email:</strong> ${reg.email}<br>
+                                   <strong>Phone:</strong> ${reg.phonenumber}</p>
+                            `;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching registrations:', error);
+                    alert('Error loading registrations: ' + error.message);
+                });
         }
-
+    
+        // Show the event list and hide registration details
+        function showEventList() {
+            document.getElementById('eventsTable').classList.remove('hidden');
+            document.getElementById('registrationDetails').classList.add('hidden');
+            document.getElementById('backButton').classList.add('hidden');
+    
+            // Reset the header text back to "Manage Events"
+            const header = document.querySelector('.container h1');
+            header.textContent = 'Manage Events';
+        }
+    
+        // Function to handle event deletion
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                fetch(`http://localhost:8082/events/${eventId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to delete event');
+                        }
+                        alert('Event deleted successfully');
+                        fetchEvents(); // Reload the events list
+                    })
+                    .catch(error => {
+                        console.error('Error deleting event:', error);
+                        alert('Error deleting event: ' + error.message);
+                    });
+            }
+        }
+    
+        // Function to handle event editing
+        function editEvent(eventId) {
+            const newTitle = prompt('Enter the new title for the event:');
+            const newDescription = prompt('Enter the new description for the event:');
+            const newDate = prompt('Enter the new date (YYYY-MM-DD) for the event:');
+            const newLocation = prompt('Enter the new location for the event:');
+    
+            if (newTitle && newDescription && newDate && newLocation) {
+                const updatedEvent = {
+                    id: eventId,
+                    title: newTitle,
+                    description: newDescription,
+                    date: newDate,
+                    location: newLocation
+                };
+    
+                // Update PUT request to include eventId in the URL
+                fetch(`http://localhost:8082/events/${eventId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedEvent)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update event');
+                        }
+                        alert('Event updated successfully');
+                        fetchEvents(); // Reload the events list
+                    })
+                    .catch(error => {
+                        console.error('Error updating event:', error);
+                        alert('Error updating event: ' + error.message);
+                    });
+            } else {
+                alert('Please fill in all the details for the event.');
+            }
+        }
+    
+        // Simulated function to retrieve the logged-in username
+        function getLoggedInUsername() {
+            return "adminUsername"; // Example username; change accordingly
+        }
+    
         // Fetch events when the page loads
         document.addEventListener('DOMContentLoaded', fetchEvents);
     </script>
 </body>
+
 </html>
