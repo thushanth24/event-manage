@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,9 +25,49 @@
             padding: 20px;
             border-radius: 25px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 50%;
-            height: auto;
+            width: 40%;
+            top: 45%;
+            height: 50%;
             text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+            /* Added transition for scaling */
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+            /* Scale up on hover */
+        }
+
+        .glass-division {
+            position: absolute;
+            top: 53%;
+            left: 40px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 22%;
+            height: 50%;
+            text-align: left;
+        }
+
+        .circle-wrapper {
+            position: absolute;
+            top: 53%;
+            right: 40px;
+            height: 47%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -44,39 +85,72 @@
             justify-content: space-around;
             margin-top: 20px;
             padding: 20px;
+            height: 50%;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 15px;
             backdrop-filter: blur(5px);
         }
 
-        .dashboard-card {
+        .dashboard-card1 {
             background: rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 20px;
-            width: 150px;
+            width: 30%;
+            margin-top: 30px;
+            margin-bottom: 30px;
             text-align: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .dashboard-card:hover {
+        .dashboard-card1:hover {
+            background: #4BCBEB;
             transform: scale(1.05);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .dashboard-card h3 {
+        .dashboard-card1 h3 {
             margin: 10px 0;
             font-size: 1.4em;
             color: #fff;
         }
 
-        .dashboard-card p {
+        .dashboard-card1 p {
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        .dashboard-card2 {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 30%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card2:hover {
+            background: #FE9496;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card2 h3 {
+            margin: 10px 0;
+            font-size: 1.4em;
+            color: #fff;
+        }
+
+        .dashboard-card2 p {
             font-size: 1.2em;
             color: #fff;
         }
 
         button {
-            margin: 20px;
+            margin: 40px;
             padding: 10px 20px;
             background: linear-gradient(45deg, #432f85, #1b07a0);
             color: white;
@@ -92,42 +166,50 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
-        #eventList {
-            margin-top: 20px;
-            text-align: left;
-            display: none;
-        }
-        .circle-wrapper {
-            position: absolute;
-            top: 50%;
-            right: 50px;
-            transform: translateY(-50%);
+        .countdown {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: rgb(196, 167, 1);
         }
 
-        .container {
-            position: relative;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
+        .nextEventContainer {
+            text-align: center;
+        }
+
+        .glass-division {
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        .glass-division h2 {
+            font-size: 1.7em;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            height: 50px;
+            text-align: justify;
+            padding: 12px;
+        }
+
+        .glass-division p {
+            margin: 10px 0;
+            font-size: 1.3em;
+            color: #9E58FF;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>ADMINISTRATOR DASHBOARD</h1>
+        <h1>EVENT PANEL</h1>
 
         <div class="dashboard-section">
-            <div class="dashboard-card">
+            <div class="dashboard-card1">
                 <h3>Upcoming Events</h3>
                 <p id="upcomingEventsCount">0</p>
             </div>
-            <div class="dashboard-card">
+            <div class="dashboard-card2">
                 <h3>Finished Events</h3>
                 <p id="finishedEventsCount">0</p>
-            </div>
-            <div class="dashboard-card">
-                <h3>Total Registrations</h3>
-                <p id="totalRegistrations">0</p>
             </div>
         </div>
 
@@ -135,15 +217,26 @@
         <button onclick="window.location.href='manage-events.html'">Manage Events</button>
     </div>
 
+    <!-- Glass effect division for the next event -->
+    <div class="glass-division" id="nextEventDetails">
+        <h2>Next Event ...</h2>
+        <div class="nextEventContainer">
+            <p><br><span id="nextEventName">N/A</span></p>
+            <p><strong>Location:</strong><br> <span id="nextEventLocation">N/A</span></p>
+            <p><strong>Date:</strong><br> <span id="nextEventDate">N/A</span></p>
+            <p><strong>Remaining time for Event Day</strong> <br><span class="countdown" id="countdownTimer">00:00:00</span></p>
+        </div>
+    </div>
+
     <!-- Doughnut Chart Circle for events (right side of the dashboard) -->
     <div class="circle-wrapper">
-        <canvas id="eventsChart" width="200" height="200"></canvas>
+        <canvas id="eventsChart" width="300" height="300"></canvas>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-               // Fetch and display the number of upcoming, finished events, and total registrations
-               function fetchDashboardData() {
+        // Fetch and display the number of upcoming, finished events, and total registrations
+        function fetchDashboardData() {
             const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
 
             fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjust this URL as needed
@@ -160,16 +253,26 @@
                     const upcomingEvents = events.filter(event => new Date(event.date) > currentDate);
                     const finishedEvents = events.filter(event => new Date(event.date) <= currentDate);
 
-                    // Sum up the registrations for all events
-                    const totalRegistrations = events.reduce((acc, event) => acc + event.registrationCount, 0);
-
                     // Update the dashboard with fetched data
                     document.getElementById('upcomingEventsCount').textContent = upcomingEvents.length;
                     document.getElementById('finishedEventsCount').textContent = finishedEvents.length;
-                    document.getElementById('totalRegistrations').textContent = totalRegistrations;
 
                     // Update the chart with event data
                     updateEventChart(upcomingEvents.length, finishedEvents.length);
+
+                    // Display next event details and countdown
+                    if (upcomingEvents.length > 0) {
+                        // Sort upcoming events by date
+                        upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+                        const nextEvent = upcomingEvents[0]; // Get the nearest upcoming event
+
+                        document.getElementById('nextEventName').textContent = nextEvent.name;
+                        document.getElementById('nextEventLocation').textContent = nextEvent.location;
+                        document.getElementById('nextEventDate').textContent = nextEvent.date;
+
+                        // Start the countdown for the next event
+                        startCountdown(new Date(nextEvent.date));
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching dashboard data:', error);
@@ -189,16 +292,16 @@
             window.eventChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Upcoming Events', 'Finished Events'],
+                    labels: ['Upcoming', 'Finished'],
                     datasets: [{
                         data: [upcomingCount, finishedCount],
-                        backgroundColor: ['blue', 'yellow'],
-                        hoverBackgroundColor: ['#4a90e2', '#f5c04d']
+                        backgroundColor: ['#A05AFF', '#1BCFB4'],
+                        hoverBackgroundColor: ['#4BCBEB', '#FE9496']
                     }]
                 },
                 options: {
                     responsive: true,
-                    cutout: '70%', // Makes the chart a doughnut with a hollow center
+                    cutout: '60%',
                     plugins: {
                         legend: {
                             position: 'bottom'
@@ -208,6 +311,28 @@
             });
         }
 
+        // Countdown timer for the next event
+        function startCountdown(eventDate) {
+            const countdownElement = document.getElementById('countdownTimer');
+
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = "Event Started";
+                } else {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }, 1000);
+        }
+
         // Simulated function to retrieve the logged-in username
         function getLoggedInUsername() {
             return "adminUsername"; // Example username; change accordingly
@@ -215,7 +340,6 @@
 
         // Fetch and display the dashboard data when the page loads
         document.addEventListener('DOMContentLoaded', fetchDashboardData);
-
     </script>
 </body>
 

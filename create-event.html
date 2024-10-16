@@ -51,9 +51,7 @@
             background-clip: text;
             color: #120249;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.6),
-                /* outer glow */
                 0 0 20px rgba(255, 255, 255, 0.7),
-                /* medium glow */
                 0 0 30px rgba(255, 255, 255, 0.7);
         }
 
@@ -124,34 +122,34 @@
             <label for="eventLocation">Event Location:</label>
             <input type="text" id="eventLocation">
 
-            <input type="hidden" id="eventCreatedBy"> <!-- Hidden input to store createdBy -->
+            <input type="hidden" id="eventCreatedBy">
 
             <button type="submit">Create Event</button>
         </form>
         <p id="eventResponseMessage"></p>
     </div>
 
-    <!-- Right side: Earth 3D model container -->
+    <!--Earth 3D model container -->
     <div id="3d-container"></div>
 
     <script>
         // Assuming you have a way to get the logged-in user's username
-        const loggedInUser = "adminUsername"; // Replace this with actual logged-in user retrieval logic
-        document.getElementById('eventCreatedBy').value = loggedInUser; // Set the createdBy field
+        const loggedInUser = "adminUsername"; 
+        document.getElementById('eventCreatedBy').value = loggedInUser; 
 
         document.getElementById('createEventForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); 
 
             const newEvent = {
                 title: document.getElementById('eventTitle').value,
                 date: document.getElementById('eventDate').value,
                 description: document.getElementById('eventDescription').value,
                 location: document.getElementById('eventLocation').value,
-                createdBy: document.getElementById('eventCreatedBy').value // Retrieve createdBy from the hidden input
+                createdBy: document.getElementById('eventCreatedBy').value
             };
 
             // Fetch request for event creation
-            fetch('http://localhost:8082/events', { // Adjust endpoint to your API
+            fetch('http://localhost:8082/events', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -162,7 +160,7 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
                     }
-                    return response.text(); // Assuming the response is text
+                    return response.text();
                 })
                 .then(data => {
                     document.getElementById('eventResponseMessage').textContent = `Event created successfully: ${data}`;
@@ -180,19 +178,18 @@
             // Load the space texture
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load('/Images/space.jpg', function (texture) {
-                // Create a large sphere geometry
+                // Sphere geometry
                 const spaceGeometry = new THREE.SphereGeometry(1000, 64, 64);
 
                 // Create material using the space texture
                 const spaceMaterial = new THREE.MeshBasicMaterial({
                     map: texture,
-                    side: THREE.BackSide  // Render the texture on the inside of the sphere
+                    side: THREE.BackSide  
                 });
 
                 // Create the sphere mesh
                 const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
 
-                // Add the space sphere to the scene
                 scene.add(spaceSphere);
             });
 
