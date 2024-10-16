@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/Images/manageEvent.png">
     <title>Manage Events</title>
     <style>
         body {
@@ -207,48 +208,51 @@
     </div>
 
     <script>
-        // Fetch events created by the admin
-        function fetchEvents() {
-            const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
-    
-            fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjusted to use 'username'
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.statusText);
-                    }
-                    return response.json(); // Assuming the response is in JSON format
-                })
-                .then(events => {
-                    const tableBody = document.getElementById('eventsTable').querySelector('tbody');
-                    tableBody.innerHTML = ''; // Clear previous events
-    
-                    if (events.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="5">No events created by you yet.</td></tr>';
-                    } else {
-                        events.forEach(event => {
-                            const row = document.createElement('tr');
-                            row.classList.add('event-row');
-                            row.innerHTML = `
-                                <td>${event.title}</td>
-                                <td>${new Date(event.date).toLocaleDateString()}</td>
-                                <td>${event.description}</td>
-                                <td>${event.location}</td>
-                                <td>
-                                    <button class="editButton" onclick="editEvent(${event.id})">Edit</button>
-                                    <button class="deleteButton" onclick="deleteEvent(${event.id})">Delete</button>
-                                </td>
-                            `;
-                            row.onclick = () => {
-                                fetchRegistrations(event.id);
-                            };
-                            tableBody.appendChild(row);
-                        });
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
+        // Fetch events created by the admin and sort them by date
+function fetchEvents() {
+    const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+
+    fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjusted to use 'username'
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json(); // Assuming the response is in JSON format
+        })
+        .then(events => {
+            const tableBody = document.getElementById('eventsTable').querySelector('tbody');
+            tableBody.innerHTML = ''; // Clear previous events
+
+            if (events.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5">No events created by you yet.</td></tr>';
+            } else {
+                // Sort events by date (ascending order)
+                events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                events.forEach(event => {
+                    const row = document.createElement('tr');
+                    row.classList.add('event-row');
+                    row.innerHTML = `
+                        <td>${event.title}</td>
+                        <td>${new Date(event.date).toLocaleDateString()}</td>
+                        <td>${event.description}</td>
+                        <td>${event.location}</td>
+                        <td>
+                            <button class="editButton" onclick="editEvent(${event.id})">Edit</button>
+                            <button class="deleteButton" onclick="deleteEvent(${event.id})">Delete</button>
+                        </td>
+                    `;
+                    row.onclick = () => {
+                        fetchRegistrations(event.id);
+                    };
+                    tableBody.appendChild(row);
                 });
-        }
+            }
+        })
+        .catch(error => {
+            document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
+        });
+}
     
         // Fetch registered users for the selected event
         function fetchRegistrations(eventId) {

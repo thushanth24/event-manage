@@ -1,16 +1,8 @@
 {
-<<<<<<< HEAD
-  "last_build_time": 1728970007406,
-  "last_update_time": 1728904813470,
+  "last_build_time": 1729068543713,
+  "last_update_time": 1729005627827,
   "distribution_version": "2201.10.1",
   "last_modified_time": {
-    "event": 1728938545006
-=======
-  "last_build_time": 1728978006265,
-  "last_update_time": 1728904857672,
-  "distribution_version": "2201.10.1",
-  "last_modified_time": {
-    "event": 1728903966715
->>>>>>> 1b78d2b0d8b14ccaa3ceef9ee584ed459d7f55dc
+    "event": 1729004353632
   }
 }

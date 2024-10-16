@@ -24,13 +24,12 @@
             padding: 20px;
             border-radius: 25px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 35%;
-            height: 35%;
+            width: 50%;
+            height: auto;
             text-align: center;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            
         }
 
         h1 {
@@ -40,9 +39,44 @@
             border-radius: 15px;
         }
 
+        .dashboard-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .dashboard-card {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h3 {
+            margin: 10px 0;
+            font-size: 1.4em;
+            color: #fff;
+        }
+
+        .dashboard-card p {
+            font-size: 1.2em;
+            color: #fff;
+        }
+
         button {
-            margin-top: 80px;
-            margin-left: 30px;
+            margin: 20px;
             padding: 10px 20px;
             background: linear-gradient(45deg, #432f85, #1b07a0);
             color: white;
@@ -61,52 +95,128 @@
         #eventList {
             margin-top: 20px;
             text-align: left;
-            display: none; /* Hide by default */
-        }
-
-        .event {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .event h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-
-        .registration-details {
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
             display: none;
         }
-
-        .action-buttons {
-            margin-top: 10px;
+        .circle-wrapper {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
         }
 
-        .action-buttons button {
-            margin: 0 5px;
-            padding: 5px 10px;
-            font-size: 0.9em;
-            cursor: pointer;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
+        .container {
+            position: relative;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ADMINISTRATOR PANEL</h1>
+        <h1>ADMINISTRATOR DASHBOARD</h1>
+
+        <div class="dashboard-section">
+            <div class="dashboard-card">
+                <h3>Upcoming Events</h3>
+                <p id="upcomingEventsCount">0</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Finished Events</h3>
+                <p id="finishedEventsCount">0</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Registrations</h3>
+                <p id="totalRegistrations">0</p>
+            </div>
+        </div>
+
         <button onclick="window.location.href='create-event.html'">Create Event</button>
-        <button onclick="window.location.href='manage-events.html'">Manage Events</button> 
+        <button onclick="window.location.href='manage-events.html'">Manage Events</button>
     </div>
+
+    <!-- Doughnut Chart Circle for events (right side of the dashboard) -->
+    <div class="circle-wrapper">
+        <canvas id="eventsChart" width="200" height="200"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+               // Fetch and display the number of upcoming, finished events, and total registrations
+               function fetchDashboardData() {
+            const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+
+            fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjust this URL as needed
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(events => {
+                    const currentDate = new Date();
+
+                    // Filter upcoming and finished events
+                    const upcomingEvents = events.filter(event => new Date(event.date) > currentDate);
+                    const finishedEvents = events.filter(event => new Date(event.date) <= currentDate);
+
+                    // Sum up the registrations for all events
+                    const totalRegistrations = events.reduce((acc, event) => acc + event.registrationCount, 0);
+
+                    // Update the dashboard with fetched data
+                    document.getElementById('upcomingEventsCount').textContent = upcomingEvents.length;
+                    document.getElementById('finishedEventsCount').textContent = finishedEvents.length;
+                    document.getElementById('totalRegistrations').textContent = totalRegistrations;
+
+                    // Update the chart with event data
+                    updateEventChart(upcomingEvents.length, finishedEvents.length);
+                })
+                .catch(error => {
+                    console.error('Error fetching dashboard data:', error);
+                });
+        }
+
+        // Function to create/update the doughnut chart
+        function updateEventChart(upcomingCount, finishedCount) {
+            const ctx = document.getElementById('eventsChart').getContext('2d');
+
+            // If the chart already exists, destroy it to avoid duplicate rendering
+            if (window.eventChartInstance) {
+                window.eventChartInstance.destroy();
+            }
+
+            // Create the chart
+            window.eventChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Upcoming Events', 'Finished Events'],
+                    datasets: [{
+                        data: [upcomingCount, finishedCount],
+                        backgroundColor: ['blue', 'yellow'],
+                        hoverBackgroundColor: ['#4a90e2', '#f5c04d']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%', // Makes the chart a doughnut with a hollow center
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Simulated function to retrieve the logged-in username
+        function getLoggedInUsername() {
+            return "adminUsername"; // Example username; change accordingly
+        }
+
+        // Fetch and display the dashboard data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+
+    </script>
 </body>
+
 </html>
