@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/Images/manageEvent.png">
+<link rel="icon" href="/Images/manageEvent.png">
     <title>Manage Events</title>
     <style>
         body {
@@ -208,18 +208,21 @@
     </div>
 
     <script>
-        // Fetch events created by the admin and sort them by date
-function fetchEvents() {
+        // Fetch events created by the admin
+        function fetchEvents() {
     const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
 
-    fetch(`http://localhost:8082/events?username=${loggedInUser}`) // Adjusted to use 'username'
+    console.log('Fetching events for user:', loggedInUser);
+    
+    fetch(`http://localhost:8082/events?username=${loggedInUser}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
-            return response.json(); // Assuming the response is in JSON format
+            return response.json();
         })
         .then(events => {
+            console.log('Fetched events:', events); // Log fetched events
             const tableBody = document.getElementById('eventsTable').querySelector('tbody');
             tableBody.innerHTML = ''; // Clear previous events
 
@@ -239,12 +242,12 @@ function fetchEvents() {
                         <td>${event.location}</td>
                         <td>
                             <button class="editButton" onclick="editEvent(${event.id})">Edit</button>
-                            <button class="deleteButton" onclick="deleteEvent(${event.id})">Delete</button>
+                            <button class="deleteButton" onclick="deleteEvent(${event.id}, event)">Delete</button>
                         </td>
                     `;
-                    row.onclick = () => {
-                        fetchRegistrations(event.id);
-                    };
+
+                    row.onclick = () => {fetchRegistrations(event.id, event.title, event.date, event.description, event.location);};
+
                     tableBody.appendChild(row);
                 });
             }
@@ -253,48 +256,64 @@ function fetchEvents() {
             document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`;
         });
 }
+
     
         // Fetch registered users for the selected event
-        function fetchRegistrations(eventId) {
-            // Hide the event table
-            document.getElementById('eventsTable').classList.add('hidden');
-            document.getElementById('backButton').classList.remove('hidden');
-    
-            // Clear the header and show "Registered Users"
-            const header = document.querySelector('.container h1');
-            header.textContent = 'Registered Users';
-    
-            // Show the selected event row registration details
-            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.statusText);
-                    }
-                    return response.json(); // Assuming the response is in JSON format
-                })
-                .then(registrations => {
-                    const registrationDetails = document.getElementById('registrationDetails');
-                    registrationDetails.classList.remove('hidden');
-                    registrationDetails.innerHTML = ''; // Clear previous registration details
-    
-                    if (registrations.length === 0) {
-                        registrationDetails.innerHTML = '<p>No users registered for this event yet.</p>';
-                    } else {
-                        registrations.forEach(reg => {
-                            registrationDetails.innerHTML += `
-                                <p><strong>Name:</strong> ${reg.name}<br>
-                                   <strong>Email:</strong> ${reg.email}<br>
-                                   <strong>Phone:</strong> ${reg.phonenumber}</p>
-                            `;
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching registrations:', error);
-                    alert('Error loading registrations: ' + error.message);
+    function fetchRegistrations(eventId, eventTitle, eventDate, eventDescription, eventLocation) {
+    // Hide the event table
+    document.getElementById('eventsTable').classList.add('hidden');
+    document.getElementById('backButton').classList.remove('hidden');
+
+    // Clear the header and show "Registered Users"
+    const header = document.querySelector('.container h1');
+    header.textContent = 'Registered Users for Event: ' + eventTitle;
+
+    // Show the selected event row registration details
+    fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json(); // Assuming the response is in JSON format
+        })
+        .then(registrations => {
+            const registrationDetails = document.getElementById('registrationDetails');
+            registrationDetails.classList.remove('hidden');
+            registrationDetails.innerHTML = ''; // Clear previous registration details
+
+            // Display the event details at the top
+            registrationDetails.innerHTML += `
+                <h2>Event Details</h2>
+                <p><strong>Title:</strong> ${eventTitle}</p>
+                <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString()}</p>
+                <p><strong>Description:</strong> ${eventDescription}</p>
+                <p><strong>Location:</strong> ${eventLocation}</p>
+                <hr>
+            `;
+
+            if (registrations.length === 0) {
+                registrationDetails.innerHTML += '<p>No users registered for this event yet.</p>';
+            } else {
+                // Display the number of registered users
+                registrationDetails.innerHTML += `<h3>Total Registered Users: ${registrations.length}</h3>`;
+
+                // Display details of each registered user
+                registrations.forEach(reg => {
+                    registrationDetails.innerHTML += `
+                        <p><strong>Name:</strong> ${reg.name}<br>
+                           <strong>Email:</strong> ${reg.email}<br>
+                           <strong>Phone:</strong> ${reg.phonenumber}</p>
+                    `;
                 });
-        }
-    
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching registrations:', error);
+            alert('Error loading registrations: ' + error.message);
+        });
+}
+
+
         // Show the event list and hide registration details
         function showEventList() {
             document.getElementById('eventsTable').classList.remove('hidden');
@@ -306,23 +325,50 @@ function fetchEvents() {
             header.textContent = 'Manage Events';
         }
     
-        // Function to handle event deletion
-        function deleteEvent(eventId) {
-            if (confirm('Are you sure you want to delete this event?')) {
-                fetch(`http://localhost:8082/events/${eventId}`, { method: 'DELETE' })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to delete event');
-                        }
-                        alert('Event deleted successfully');
-                        fetchEvents(); // Reload the events list
-                    })
-                    .catch(error => {
-                        console.error('Error deleting event:', error);
-                        alert('Error deleting event: ' + error.message);
-                    });
-            }
+        function deleteEvent(eventId, event) {
+    event.stopPropagation(); // Prevent the row click event from firing
+
+    fetch(`http://localhost:8082/events?eventId=${eventId}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
         }
+        // Check the content type of the response
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            return response.json(); // Parse JSON if the content type is application/json
+        } else {
+            return response.text(); // Otherwise, return the response as text
+        }
+    })
+    .then(data => {
+        // Clear previous messages
+        document.getElementById('manageResponseMessage').textContent = '';
+
+        // Check if data is a string (text response)
+        if (typeof data === 'string') {
+            console.log('Server message:', data); // Log the text message
+            document.getElementById('manageResponseMessage').textContent = data; // Show the message in your UI
+        } else {
+            console.log('Event deleted successfully:', data);
+            document.getElementById('manageResponseMessage').textContent = "Event deleted successfully!";
+        }
+        
+        // Wait a moment before re-fetching events to allow for server processing
+        setTimeout(fetchEvents, 500); // Adjust delay as needed (500ms here)
+    })
+    .catch(error => {
+        console.error('Error deleting event:', error);
+        document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`; // Show error message
+    });
+}
+
+
+
+
+
     
         // Function to handle event editing
         function editEvent(eventId) {
