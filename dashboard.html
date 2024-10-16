@@ -33,12 +33,10 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: transform 0.3s ease;
-            /* Added transition for scaling */
         }
 
         .container:hover {
             transform: scale(1.05);
-            /* Scale up on hover */
         }
 
         .glass-division {
@@ -86,7 +84,7 @@
             margin-top: 20px;
             padding: 20px;
             height: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             backdrop-filter: blur(5px);
         }
@@ -95,7 +93,7 @@
             background: rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 20px;
-            width: 30%;
+            width: 35%;
             margin-top: 30px;
             margin-bottom: 30px;
             text-align: center;
@@ -104,19 +102,19 @@
         }
 
         .dashboard-card1:hover {
-            background: #4BCBEB;
+            background: linear-gradient(45deg, #A05AFF,#bf29e1,#703fb5, #470354);
             transform: scale(1.05);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
         .dashboard-card1 h3 {
             margin: 10px 0;
-            font-size: 1.4em;
+            font-size: 1.2em;
             color: #fff;
         }
 
         .dashboard-card1 p {
-            font-size: 1.2em;
+            font-size: 1.9em;
             color: #fff;
         }
 
@@ -124,7 +122,7 @@
             background: rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             padding: 20px;
-            width: 30%;
+            width: 35%;
             margin-top: 30px;
             margin-bottom: 30px;
             text-align: center;
@@ -133,35 +131,37 @@
         }
 
         .dashboard-card2:hover {
-            background: #FE9496;
+            background: linear-gradient(45deg, #1BCFB4,#148f78,#139e89, #034b52);
             transform: scale(1.05);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
         .dashboard-card2 h3 {
             margin: 10px 0;
-            font-size: 1.4em;
-            color: #fff;
-        }
-
-        .dashboard-card2 p {
             font-size: 1.2em;
             color: #fff;
         }
 
+        .dashboard-card2 p {
+            font-size: 1.9em;
+            color: #fff;
+        }
+
         button {
-            margin: 40px;
+            margin: 25px;
             padding: 10px 20px;
-            background: linear-gradient(45deg, #432f85, #1b07a0);
+            width: 180px;
+            height: 60px;
+            background: linear-gradient(45deg, #40a4b8, #1b07a0);
             color: rgb(189, 177, 177);
             border: none;
-            border-radius: 25px;
+            border-radius: 35px;
             cursor: pointer;
             transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         button:hover {
-            background: linear-gradient(45deg, #069422, #033801);
+            background: linear-gradient(45deg, #06a927,#70a57b,#056718, #033c01);
             transform: scale(1.08);
             color: #fff;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -301,7 +301,7 @@
                     datasets: [{
                         data: [upcomingCount, finishedCount],
                         backgroundColor: ['#A05AFF', '#1BCFB4'],
-                        hoverBackgroundColor: ['#4BCBEB', '#FE9496']
+                        hoverBackgroundColor: ['#78068f', '#056718']
                     }]
                 },
                 options: {
