@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WSO2 Contact</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand&display=swap">
+    <link rel="stylesheet" href="/CSS/cantect.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            width: 100%;
+        }
+        .map {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            margin: 0 auto;
+            display: block;
+            width: 100%;
+            max-width: 1070px;
+            height: 100%;
+            max-height: 100%;
+        }
+        .info-note {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2, h1 {
+            font-family: 'arial', cursive;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <img src="/HTML/image/logo.png" class="logo">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+
+
+    </div>
+    <video autoplay muted loop id="video-background">
+        <source src="/HTML/image/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div class="container d-flex flex-column align-items-center">
+        <br><br><br><br><br><br><br><br>
+        <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.86680951098!2d79.908075!3d6.80427675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2454fd53d3393%3A0xe480b0a47642a364!2sKaradiyana%20Junction!5e0!3m2!1sen!2slk!4v1728564261852!5m2!1sen!2slk" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <br>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="info-note">
+                    <h2>Contact Information</h2>
+                    <p><strong>Phone Number:</strong> 065-2514369</p>
+                    <p><strong>Email:</strong> happyevend@gmail.com</p>
+                    <p>Whether you are looking for technology integration</p>
+                    <p> support services, or any other inquiries</p>
+                    <p>we are here to help. Feel free to reach out to us for more information.</p>
+                    <br>
+                    <p>"Please come again" is a friendly phrase used to invite someone to return. 
+                        It conveys warmth and gratitude, making the person feel welcomed. 
+                        This simple gesture builds a positive connection and encourages future visits.</p>
+                    <p>For any inquiries or assistance, please reach out to us via email at happyevend@gmail.com. You can also call our customer service hotline at 065-2514369 . We look forward to hearing from you and will respond to your requests promptly.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h1 class="text-center mb-4">Contact Us</h1>
+                    <form>
+                        <!-- Name -->
+                        <div class="form-group position-relative">
+                            <label for="formName" class="d-block">
+                                <i class="icon" data-feather="user"></i>
+                            </label>
+                            <input type="text" id="formName" class="form-control form-control-lg thick" placeholder="Name">
+                        </div>
+
+                        <!-- E-mail -->
+                        <div class="form-group position-relative">
+                            <label for="formEmail" class="d-block">
+                                <i class="icon" data-feather="mail"></i>
+                            </label>
+                            <input type="email" id="formEmail" class="form-control form-control-lg thick" placeholder="E-mail">
+                        </div>
+
+                        <!-- Message -->
+                        <div class="form-group message">
+                            <textarea id="formMessage" class="form-control form-control-lg" rows="7" placeholder="Message"></textarea>
+                        </div>
+                        
+                        <!-- Submit btn -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Send message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="tm-mb-4 text-center tm-social-s">
+            <a href="https://fb.com/templatemo" class="tm-social-link"><i class="fab fa-facebook tm-social-icon"></i></a>
+            <a href="https://instagram.com" class="tm-social-link"><i class="fab fa-instagram tm-social-icon"></i></a>
+            <a href="https://twitter.com" class="tm-social-link"><i class="fab fa-twitter tm-social-icon"></i></a>
+            <a href="https://youtube.com" class="tm-social-link"><i class="fab fa-youtube tm-social-icon"></i></a>
+        </div>
+        <footer class="text-center tm-mb-1">
+            <p><br>Copyright &copy; 2020 happy Evend 
+            
+            - Design: <a rel="nofollow noopener" href="https://happy.com" target="_blank">Happy Event</a></p>
+        </footer>
+    </div>
+
+    <script src='https://chajay.com/'></script>
+    <script>
+        feather.replace();
+    </script>
+
+    
+</body>
+</html>

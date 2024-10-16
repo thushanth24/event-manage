@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="ETP Test Project - page 1">
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Premier Event Technology</title>
+	<link href="/CSS/about.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css" integrity="sha384-wxqG4glGB3nlqX0bi23nmgwCSjWIW13BdLUEYC4VIMehfbcro/ATkyDsF/AbIOVe" crossorigin="anonymous">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+		*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+body {
+    margin: 0;
+    overflow: hidden; /* Prevent default scrolling */
+}
+
+
+.section {
+    display: none; /* Hide all sections by default */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	opacity: 0; /* Start as transparent */
+    transition: opacity 0.5s ease-in-out; /* Add transition for opacity */
+}
+.section.active {
+    display: flex; /* Show the active section */
+    opacity: 1; /* Fully visible */}
+
+		.navbar{
+    width: 95%;
+    margin: auto;
+    padding-top: -90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+	z-index: 12;
+	font-family: sans-serif;
+	padding-left: 2.5%;
+	position: fixed;
+    overflow: hidden;
+
+}
+
+.logo{
+    width: 500px;
+    height: 150px;
+    cursor: pointer;
+}
+/* For webkit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    display: none;
+}
+.navbar ul li{
+	padding-right: 0%;
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+	font-weight:lighter;
+	font-family: sans-serif;
+	font-size: 16px;
+}
+
+.navbar ul li a{
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+
+}
+.navbar ul li::after{
+    content: '';
+    height: 3px;
+    width: 0;
+    background: #009688;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    transition: 0.5s;
+}
+.navbar ul li:hover::after{
+    width: 100%;
+}
+	</style>
+</head>
+<body>
+	
+	<div class="banner">
+        <div class="navbar">
+            <img src="/HTML/image/logo.png" class="logo">
+            <ul>
+                <li><a href="/HTML/home.html">Home</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+
+
+    </div>
+	<div class="rishi"></div>
+
+	<video autoplay muted loop id="video-background">
+        <source src="/HTML/image/4K 2160p Blue Ambient Waving Lines Motion Background.mp4" type="video/mp4">
+      
+    </video>
+	
+	
+	<div class="section" id="section1">
+		<div class="hero-image-about">
+		
+		
+			<!-- Edit Banner Text -->
+			<div class="hero-text">
+				
+				<h1>About Us</h1>
+				<p class="hero-subtitle">20+ Years of Experience</p>
+			</div>
+			<!-- END Banner Text -->
+		</div>
+
+	</div>
+	
+	<main>
+		<article class="main">
+			<section class="content">
+				<!-- Edit Homepage Text -->
+				<div class="section" id="section2">
+					<p class="blue-text">Our <strong>Services</strong></p>
+				<p id="text"> Planning: This involves defining the event's purpose, goals, and objectives, as well as developing a budget, timeline, and overall strategy.
+
+                    Coordination: Managing various elements like venue selection, logistics, vendor negotiations, and scheduling to ensure all aspects of the event come together.
+                    
+                    Execution: Overseeing the actual event, including setup, production, and real-time problem-solving to address any issues that arise.
+                    
+                    Marketing and Promotion: Creating awareness and attracting attendees through advertising, social media, and other marketing strategies.
+                    
+                    Post-Event Evaluation: Assessing the success of the event through feedback, analyzing what worked well and what could be improved for future events..</p>
+				<!-- END Homepage Text -->
+				</div>
+				
+			</section>
+			<div class="section" id="section3">
+				<div id="services">
+					<section class="grid-services">
+						  <!-- Edit Services Section -->
+						<div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-video"></i>
+								</div>
+								<div class="services-description">
+								<!-- Edit Video Section -->
+									<h3>Video</h3>
+									<p>"Our management team oversees all video production to ensure high-quality presentations."
+										"We prioritize effective communication to meet client expectations seamlessly.".</p>
+								<!-- END Video Section -->
+								</div>
+							</div>
+						</div>
+						<div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-volume-up"></i>
+								</div>
+								<div class="services-description">
+									<!-- Edit Audio Section -->
+									<h3>Audio</h3>
+									<p>"Our management guarantees precise audio setups for optimal sound quality."
+										"We coordinate closely with sound engineers to deliver flawless audio experiences.".</p>
+									<!-- END Audio Section -->
+								</div>
+							</div>
+						</div>
+						<div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-bolt"></i>
+								</div>
+								<div class="services-description">
+									<!-- Edit Lighting Section -->
+									<h3>Lighting</h3>
+									<p>"Management meticulously plans lighting arrangements to create stunning visual effects."
+										"We ensure that all lighting setups align with the event's theme and atmosphere."
+										</p>
+									<!-- END Lighting Section -->
+								</div>
+							</div>
+						</div>
+						 <div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-pencil-ruler"></i>
+								</div>
+								<div class="services-description">
+									<!-- Edit Scenic Design Section -->
+									<h3>Scenic Design</h3>
+									<p>"Our management is dedicated to creating immersive environments that captivate audiences."
+										"We collaborate with clients to bring their creative visions to life through scenic design."</p>
+									<!-- END Scenic Design Section -->
+								</div>
+							</div>
+						</div>
+						<div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-paint-brush"></i>
+								</div>
+								<div class="services-description">
+									<!-- Edit Creative Services Section -->
+									<h3>Creative Services</h3>
+									<p>"Our management team drives the creative process, ensuring innovative event solutions."
+										"We focus on delivering memorable experiences through thoughtful creative direction."</p>
+									<!-- END Creative Services Section -->
+								</div>
+							</div>
+						</div>
+						<div class="grid-group-services">
+							<div class="grid-group-services-box">
+								<div class="services-icon">
+									<i class="fas fa-ship"></i>
+								</div>
+								<div class="services-description">
+									<!-- Edit Conventions Section -->
+									<h3>Conventions</h3>
+									<p>"Management provides expert oversight for all convention logistics and technology."
+										"We work closely with venue staff to ensure smooth operations throughout the event."</p>
+									<!-- END Conventions Section -->
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- END Services Section -->
+				</div>
+			</div>
+			
+		</article>
+	</main>
+
+<script>
+	function myFunction() {
+		  var x = document.getElementById("myTopnav");
+		  if (x.className === "menu") {
+			x.className += " responsive";
+		  } else {
+			x.className = "menu";
+		  }
+	} 
+</script>
+
+
+
+<a id="button"><i class="fas fa-angle-up fa-2x"></i></a>
+    <div class="container-fluid">
+        
+        <section class="tm-mb-1" id="about">
+			<div class="section" id="section4">
+
+				<div class="tm-row tm-about-row">
+					<div class="tm-section-1-l">
+						<img src="/HTML/image/pngwing.png" alt="About image" class="tm-img-responsive-1">
+					</div>
+					<article class="tm-section-1-r tm-bg-color-8">
+					 
+						<p> Event Management </p>
+							 Planning & Execution: Timing is key to organizing and executing events successfully. Proper scheduling ensures all activities happen in sequence, minimizing delays.
+							Coordination: Synchronizing different services like video, audio, lighting, and stage performances ensures the smooth flow of events.
+							
+						<p>	Business Operations</p>
+							Market Timing: Launching a product or service at the right time can capture market demand and maximize profits. Late launches can lead to missed opportunities.
+							Deadline Management: Timely delivery of tasks ensures smooth business operations, client satisfaction, and prevents penalties or losses.
+							
+						<p>	Personal Life</p>
+							Opportunities: Making decisions at the right time, such as career moves or investments, often determines the success of those choices.
+							Work-Life Balance: Managing time effectively allows for a balance between work and personal life, reducing stress and improving overall well-being.</p>
+						
+	 
+					</article>
+				</div>
+	
+			</div>
+
+			<div class="section" id="section5">
+
+				<div class="tm-about-gallery">
+					<h1 class="tm-mb-2 tm-title-color">Our Team</h1>
+					<div class="tm-gallery">
+						<div class="tm-gallery-item">
+							<img src="/html/image/thusha.jpg" alt="Team member 1" class="tm-img-responsive">
+							<h3>THUSHANTH.M</h3>
+						</div>
+						<div class="tm-gallery-item">
+							<img src="/html/image/nive.jpg" alt="Team member 2" class="tm-img-responsive">
+							<h3>NIVETHEN.R</h3>
+						</div>
+						<div class="tm-gallery-item">
+							<img src="/html/image/rishi.jpg" alt="Team member 3" class="tm-img-responsive">
+							<h3>RISHIGOBAN.J</h3>
+						</div>
+						<div class="tm-gallery-item">
+							<img src="/html/image/jey.jpg" alt="Team member 4" class="tm-img-responsive">
+							<h3>CHAJEYRAJ.K</h3>
+						</div>
+					</div>
+				</div>
+
+			</div>
+            
+
+            
+			
+        </section>
+
+		<div class="section" id="section6">
+			<section class="tm-mb-1 tm-row tm-services-row" id="servies">
+				<div class="tm-section-2-l">
+					<article class="tm-bg-color-6 tm-box-pad tm-mb-1">
+						<p> Technology and Innovation </p>
+							Adoption of Trends: Keeping up with the latest technological trends or innovations at the right time helps businesses and individuals stay competitive.
+							Updates & Maintenance: Regular and timely updates in technology ensure security and efficiency in operations.
+							<p>Marketing and Promotion</p>
+							Campaign Launches: Timing marketing campaigns around holidays, events, or industry trends ensures maximum visibility and impact.
+							Social Media: Posting content at optimal times when the target audience is most active leads to better engagement.
+							<p>Crisis Management</p>
+							Quick Response: Timely response to crises or issues can prevent small problems from escalating into larger ones, protecting reputation and minimizing damage.
+					</article>
+					
+				</div>
+				<div class="tm-bg-color-6">
+					<img src="/HTML/image/pngwing2.png" alt="Services image" class="tm-img-responsive">
+				</div>
+			</section>
+	
+			<footer class="footerRow">
+				<div class="footerColumn">
+					<span id="SocialMedia">
+						<br>
+						<a href="https://www.facebook.com/pventtechnology?fref=ts" target="_blank" class="fab fa-facebook-f"></a>
+						<a href="https://twitter.com/PventAV" target="_blank" class="fab fa-twitter"></a>
+						<a href="https://www.linkedin.com/company/pretive-gorup/?trk=prof-following-company-logo" target="_blank" class="fab fa-linkedin-in"></a>
+					</span>
+				</div>
+				<div class="footerColumn">
+						<ol id="Copyright">
+							<!-- Edit Footer Links -->
+							<li class="footerMenu"><a href="#" class="blueLink">Terms of Use</a></li>
+							<li class="footerMenu"><a href="#" class="blueLink">Privacy Policy</a></li>
+							<!-- END Footer Links -->
+						</ol>
+				</div>
+			</footer>
+
+		</div>
+        
+   
+        
+
+	</div>
+
+	<script src="script.js"></script>
+		
+</body>
+</html>
