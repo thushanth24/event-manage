@@ -60,7 +60,6 @@
         .event-row:not(:last-child) {
             margin-top: 5px;
             margin-bottom: 10px;
-            /* Space between rows (except for the last row) */
         }
 
         .event-row:hover {
@@ -75,7 +74,6 @@
             display: table;
             width: 100%;
             table-layout: fixed;
-            /* Ensure the layout remains fixed */
         }
 
 
@@ -241,7 +239,7 @@
     <script>
         // Fetch events created by the admin
         function fetchEvents() {
-    const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+    const loggedInUser = getLoggedInUsername();
 
     console.log('Fetching events for user:', loggedInUser);
 
@@ -253,9 +251,9 @@
             return response.json();
         })
         .then(events => {
-            console.log('Fetched events:', events); // Log fetched events
+            console.log('Fetched events:', events);
             const tableBody = document.getElementById('eventsTable').querySelector('tbody');
-            tableBody.innerHTML = ''; // Clear previous events
+            tableBody.innerHTML = '';
 
             if (events.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="5">No events created by you yet.</td></tr>';
@@ -263,7 +261,7 @@
                 // Sort events by date (ascending order)
                 events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                const currentDate = new Date(); // Current date to compare with event dates
+                const currentDate = new Date();
 
                 events.forEach(event => {
                     const eventDate = new Date(event.date);
@@ -274,10 +272,8 @@
                     let editButtonHTML;
                     if (eventDate < currentDate) {
                         row.classList.add('past-event');
-                        // Modify the edit button to show "Ended" and apply the endedButton style
                         editButtonHTML = `<button class="endedButton" disabled>Ended</button>`;
                     } else {
-                        // Normal edit button for future events
                         editButtonHTML = `<button class="editButton" onclick="editEvent(${event.id})">Edit</button>`;
                     }
 
@@ -308,7 +304,6 @@
 
         // Fetch registered users for the selected event
         function fetchRegistrations(eventId, eventTitle, eventDate, eventDescription, eventLocation) {
-            // Hide the event table
             document.getElementById('eventsTable').classList.add('hidden');
             document.getElementById('backButton').classList.remove('hidden');
 
@@ -317,17 +312,17 @@
             header.textContent = 'Registered Users for Event: ' + eventTitle;
 
             // Show the selected event row registration details
-            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
+            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok: ' + response.statusText);
                     }
-                    return response.json(); // Assuming the response is in JSON format
+                    return response.json();
                 })
                 .then(registrations => {
                     const registrationDetails = document.getElementById('registrationDetails');
                     registrationDetails.classList.remove('hidden');
-                    registrationDetails.innerHTML = ''; // Clear previous registration details
+                    registrationDetails.innerHTML = '';
 
                     // Display the event details at the top
                     registrationDetails.innerHTML += `
@@ -386,9 +381,9 @@
                     // Check the content type of the response
                     const contentType = response.headers.get("content-type");
                     if (contentType && contentType.includes("application/json")) {
-                        return response.json(); // Parse JSON if the content type is application/json
+                        return response.json();
                     } else {
-                        return response.text(); // Otherwise, return the response as text
+                        return response.text();
                     }
                 })
                 .then(data => {

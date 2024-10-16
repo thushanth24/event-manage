@@ -9,6 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,6 +105,7 @@
             height: 100vh;
             z-index: 0;
         }
+
     </style>
 </head>
 
@@ -134,11 +138,11 @@
 
     <script>
         // Assuming you have a way to get the logged-in user's username
-        const loggedInUser = "adminUsername"; 
-        document.getElementById('eventCreatedBy').value = loggedInUser; 
+        const loggedInUser = "adminUsername";
+        document.getElementById('eventCreatedBy').value = loggedInUser;
 
         document.getElementById('createEventForm').addEventListener('submit', function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             const newEvent = {
                 title: document.getElementById('eventTitle').value,
@@ -149,7 +153,7 @@
             };
 
             // Fetch request for event creation
-            fetch('http://localhost:8082/events', { 
+            fetch('http://localhost:8082/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -171,6 +175,14 @@
                 });
         });
 
+        // Initialize Flatpickr for date input
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#eventDate", {
+                dateFormat: "Y-m-d", // Customize the date format
+                theme: "material_blue" // Optional theme customization
+            });
+        });
+
         // 3D Earth model setup
         let scene, camera, renderer, controls, earth;
 
@@ -178,30 +190,21 @@
             // Load the space texture
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load('/Images/space.jpg', function (texture) {
-                // Sphere geometry
                 const spaceGeometry = new THREE.SphereGeometry(1000, 64, 64);
-
-                // Create material using the space texture
                 const spaceMaterial = new THREE.MeshBasicMaterial({
                     map: texture,
-                    side: THREE.BackSide  
+                    side: THREE.BackSide
                 });
-
-                // Create the sphere mesh
                 const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
-
                 scene.add(spaceSphere);
             });
 
             // Scene setup
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0d0d1f);
-
-            // Camera setup
             camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 5000);
             camera.position.set(800, 200, 1000);
 
-            // Lighting setup
             const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x444444, 1);
             hemisphereLight.position.set(0, 200, 0);
             scene.add(hemisphereLight);
@@ -213,7 +216,6 @@
             const ambientLight = new THREE.AmbientLight(0x333333);
             scene.add(ambientLight);
 
-            // Spotlight at bottom-right corner
             const spotLight = new THREE.SpotLight(0xffffff, 1.2);
             spotLight.position.set(300, -200, 500);
             spotLight.castShadow = true;
@@ -221,19 +223,16 @@
             spotLight.penumbra = 0.5;
             scene.add(spotLight);
 
-            // Renderer setup
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.getElementById('3d-container').appendChild(renderer.domElement);
 
-            // OrbitControls for interaction
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.enableZoom = true;
             controls.maxPolarAngle = Math.PI / 2;
 
-            // Load the GLTF Earth model
             let loader = new THREE.GLTFLoader();
             loader.load('scene.gltf', function (gltf) {
                 earth = gltf.scene.children[0];
