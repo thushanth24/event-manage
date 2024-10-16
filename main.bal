@@ -12,6 +12,17 @@ public type User record {|  // Changed Employee to User
     string phonenumber;      // Added phonenumber
 |};
 
+public type Viewer record {|  
+    int id?;
+    string firstname;
+    string lastname;
+    string email;
+    string username;
+    string password;
+    string phonenumber;
+    string nic;  // NIC field
+|};
+
 configurable string USER = ?;
 configurable string PASSWORD = ?;
 configurable string HOST = ?;
@@ -86,3 +97,26 @@ isolated function removeUser(int id) returns int|error {  // Function to remove 
         return error("Unable to obtain the affected row count");
     }
 }
+
+isolated function createViewerAccount(Viewer newViewer) returns int|error {
+    sql:ExecutionResult result = check dbClient->execute(`
+        INSERT INTO viewers (firstname, lastname, email, username, password, phonenumber, nic)
+        VALUES (${newViewer.firstname}, ${newViewer.lastname}, ${newViewer.email},
+                ${newViewer.username}, ${newViewer.password}, ${newViewer.phonenumber}, ${newViewer.nic})
+    `);
+    int|string? lastInsertId = result.lastInsertId;
+    if lastInsertId is int {
+        return lastInsertId;  // Return the ID of the newly created viewer
+    } else {
+        return error("Unable to obtain last insert ID");
+    }
+}
+
+# Function to login a viewer by username, password, and nic
+isolated function loginViewer(string username, string password) returns Viewer|error {
+    Viewer viewer = check dbClient->queryRow(
+        `SELECT * FROM viewers WHERE username = ${username} AND password = ${password}`
+    );
+    return viewer;  // Return the viewer if credentials match
+}
+

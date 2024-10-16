@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/Images/19187761.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 30%;
+            height: 50%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+            padding-bottom: 20px;
+            background: linear-gradient(45deg, #ff9f05, #329044, #f5f9f5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        input {
+            color: inherit;
+            width: 60%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #6480dd;
+            font-size: 15px;
+        }
+
+        .input-group {
+            padding: 1% 0;
+            position: relative;
+        }
+
+        input:focus {
+            background-color: transparent;
+            outline: transparent;
+            border-bottom: 2px solid hsl(152, 94%, 14%);
+        }
+
+        input::placeholder {
+            color: transparent;
+        }
+
+        label {
+            color: rgb(42, 2, 84);
+            position: relative;
+            left: 0.5rem;
+            top: 1.5rem;
+            cursor: auto;
+            transition: 0.3s ease all;
+            margin: 10px 0 5px;
+        }
+
+        input:focus~label,
+        input:not(:placeholder-shown)~label {
+            top: -3em;
+            color: hsl(13, 90%, 28%);
+            font-size: 15px;
+        }
+
+        button {
+            width: 60%;
+            padding: 10px;
+            margin: 2%;
+            background: linear-gradient(45deg, #432f85, #1b07a0);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #069422, #033801);
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        #responseMessage {
+            margin-top: 10px;
+            color: rgb(214, 30, 30);
+        }
+
+        .divider {
+            margin: 20px 0;
+            color: #7f7b7b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="loginContainer">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="*********" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+        <p class="divider">----------------------------------------------------------------------</p>
+        <p>Don't have an account? <button id="createAccountButton">Create Account</button></p>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script>
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            const loginCredentials = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+    
+            fetch('http://localhost:8089/viewers/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginCredentials)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.log('Response status:', response.status);
+                    return response.text().then(text => {
+                        throw new Error(`Login failed: ${text}`);
+                    });
+                }
+                return response.text(); // Assuming the response is text
+            })
+            .then(data => {
+                document.getElementById('responseMessage').textContent = `Login successful: ${data}`;
+                window.location.href = 'events.html'; // Redirect to events page after login
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
+            });
+        });
+    
+        // Handle creating account button click
+        document.getElementById('createAccountButton').addEventListener('click', function () {
+            // Redirect to the create account page
+            window.location.href = 'createAccount.html'; // Adjust this to your actual create account page
+        });
+    </script>
+    
+</body>
+
+</html>
