@@ -153,7 +153,7 @@
             margin: 40px;
             padding: 10px 20px;
             background: linear-gradient(45deg, #432f85, #1b07a0);
-            color: white;
+            color: rgb(189, 177, 177);
             border: none;
             border-radius: 25px;
             cursor: pointer;
@@ -163,6 +163,7 @@
         button:hover {
             background: linear-gradient(45deg, #069422, #033801);
             transform: scale(1.08);
+            color: #fff;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
@@ -182,18 +183,21 @@
         }
 
         .glass-division h2 {
-            font-size: 1.7em;
+            font-size: 1.5em;
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.1);
             height: 50px;
             text-align: justify;
-            padding: 12px;
+            padding: 2%;
         }
 
         .glass-division p {
             margin: 10px 0;
             font-size: 1.3em;
-            color: #9E58FF;
+            background: linear-gradient(45deg, #ad08d6, #08d8b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -224,7 +228,8 @@
             <p><br><span id="nextEventName">N/A</span></p>
             <p><strong>Location:</strong><br> <span id="nextEventLocation">N/A</span></p>
             <p><strong>Date:</strong><br> <span id="nextEventDate">N/A</span></p>
-            <p><strong>Remaining time for Event Day</strong> <br><span class="countdown" id="countdownTimer">00:00:00</span></p>
+            <p><strong>Remaining time for Event Day</strong> <br></p><h3><span class="countdown"
+                    id="countdownTimer">00:00:00</span></h3>
         </div>
     </div>
 
@@ -324,7 +329,7 @@
                     countdownElement.textContent = "Event Started";
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) - 6);
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
@@ -335,7 +340,7 @@
 
         // Simulated function to retrieve the logged-in username
         function getLoggedInUsername() {
-            return "adminUsername"; // Example username; change accordingly
+            return "adminUsername";
         }
 
         // Fetch and display the dashboard data when the page loads

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="/Images/manageEvent.png">
+    <link rel="icon" href="/Images/manageEvent.png">
     <title>Manage Events</title>
     <style>
         body {
@@ -60,7 +60,6 @@
         .event-row:not(:last-child) {
             margin-top: 5px;
             margin-bottom: 10px;
-            /* Space between rows (except for the last row) */
         }
 
         .event-row:hover {
@@ -75,7 +74,6 @@
             display: table;
             width: 100%;
             table-layout: fixed;
-            /* Ensure the layout remains fixed */
         }
 
 
@@ -182,6 +180,37 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+
+        .past-event {
+            background: rgba(255, 0, 0, 0.2);
+            color: #fff;
+            border-radius: 25px;
+            border-bottom: 2px solid #7a0c17;
+            padding-bottom: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .past-event:hover {
+            background-color: rgba(255, 0, 0, 0.3);
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .endedButton {
+            padding: 10px;
+            background: linear-gradient(45deg, #b71c1c, #7f0000);
+            color: #afaaaa;
+            border: none;
+            border-radius: 25px;
+            cursor: not-allowed;
+            width: 95px;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .endedButton:hover {
+            transform: none;
+            box-shadow: none;
+        }
     </style>
 </head>
 
@@ -210,10 +239,10 @@
     <script>
         // Fetch events created by the admin
         function fetchEvents() {
-    const loggedInUser = getLoggedInUsername(); // Replace with actual user retrieval logic
+    const loggedInUser = getLoggedInUsername();
 
     console.log('Fetching events for user:', loggedInUser);
-    
+
     fetch(`http://localhost:8082/events?username=${loggedInUser}`)
         .then(response => {
             if (!response.ok) {
@@ -222,9 +251,9 @@
             return response.json();
         })
         .then(events => {
-            console.log('Fetched events:', events); // Log fetched events
+            console.log('Fetched events:', events);
             const tableBody = document.getElementById('eventsTable').querySelector('tbody');
-            tableBody.innerHTML = ''; // Clear previous events
+            tableBody.innerHTML = '';
 
             if (events.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="5">No events created by you yet.</td></tr>';
@@ -232,21 +261,36 @@
                 // Sort events by date (ascending order)
                 events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+                const currentDate = new Date();
+
                 events.forEach(event => {
+                    const eventDate = new Date(event.date);
                     const row = document.createElement('tr');
                     row.classList.add('event-row');
+
+                    // Check if the event date is in the past
+                    let editButtonHTML;
+                    if (eventDate < currentDate) {
+                        row.classList.add('past-event');
+                        editButtonHTML = `<button class="endedButton" disabled>Ended</button>`;
+                    } else {
+                        editButtonHTML = `<button class="editButton" onclick="editEvent(${event.id})">Edit</button>`;
+                    }
+
                     row.innerHTML = `
                         <td>${event.title}</td>
-                        <td>${new Date(event.date).toLocaleDateString()}</td>
+                        <td>${eventDate.toLocaleDateString()}</td>
                         <td>${event.description}</td>
                         <td>${event.location}</td>
                         <td>
-                            <button class="editButton" onclick="editEvent(${event.id})">Edit</button>
+                            ${editButtonHTML}
                             <button class="deleteButton" onclick="deleteEvent(${event.id}, event)">Delete</button>
                         </td>
                     `;
 
-                    row.onclick = () => {fetchRegistrations(event.id, event.title, event.date, event.description, event.location);};
+                    row.onclick = () => {
+                        fetchRegistrations(event.id, event.title, event.date, event.description, event.location);
+                    };
 
                     tableBody.appendChild(row);
                 });
@@ -257,32 +301,31 @@
         });
 }
 
-    
+
         // Fetch registered users for the selected event
-    function fetchRegistrations(eventId, eventTitle, eventDate, eventDescription, eventLocation) {
-    // Hide the event table
-    document.getElementById('eventsTable').classList.add('hidden');
-    document.getElementById('backButton').classList.remove('hidden');
+        function fetchRegistrations(eventId, eventTitle, eventDate, eventDescription, eventLocation) {
+            document.getElementById('eventsTable').classList.add('hidden');
+            document.getElementById('backButton').classList.remove('hidden');
 
-    // Clear the header and show "Registered Users"
-    const header = document.querySelector('.container h1');
-    header.textContent = 'Registered Users for Event: ' + eventTitle;
+            // Clear the header and show "Registered Users"
+            const header = document.querySelector('.container h1');
+            header.textContent = 'Registered Users for Event: ' + eventTitle;
 
-    // Show the selected event row registration details
-    fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`) // Adjusted endpoint
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json(); // Assuming the response is in JSON format
-        })
-        .then(registrations => {
-            const registrationDetails = document.getElementById('registrationDetails');
-            registrationDetails.classList.remove('hidden');
-            registrationDetails.innerHTML = ''; // Clear previous registration details
+            // Show the selected event row registration details
+            fetch(`http://localhost:8084/admin/eventRegistrations/${eventId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(registrations => {
+                    const registrationDetails = document.getElementById('registrationDetails');
+                    registrationDetails.classList.remove('hidden');
+                    registrationDetails.innerHTML = '';
 
-            // Display the event details at the top
-            registrationDetails.innerHTML += `
+                    // Display the event details at the top
+                    registrationDetails.innerHTML += `
                 <h2>Event Details</h2>
                 <p><strong>Title:</strong> ${eventTitle}</p>
                 <p><strong>Date:</strong> ${new Date(eventDate).toLocaleDateString()}</p>
@@ -291,27 +334,27 @@
                 <hr>
             `;
 
-            if (registrations.length === 0) {
-                registrationDetails.innerHTML += '<p>No users registered for this event yet.</p>';
-            } else {
-                // Display the number of registered users
-                registrationDetails.innerHTML += `<h3>Total Registered Users: ${registrations.length}</h3>`;
+                    if (registrations.length === 0) {
+                        registrationDetails.innerHTML += '<p>No users registered for this event yet.</p>';
+                    } else {
+                        // Display the number of registered users
+                        registrationDetails.innerHTML += `<h3>Total Registered Users: ${registrations.length}</h3>`;
 
-                // Display details of each registered user
-                registrations.forEach(reg => {
-                    registrationDetails.innerHTML += `
+                        // Display details of each registered user
+                        registrations.forEach(reg => {
+                            registrationDetails.innerHTML += `
                         <p><strong>Name:</strong> ${reg.name}<br>
                            <strong>Email:</strong> ${reg.email}<br>
                            <strong>Phone:</strong> ${reg.phonenumber}</p>
                     `;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching registrations:', error);
+                    alert('Error loading registrations: ' + error.message);
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching registrations:', error);
-            alert('Error loading registrations: ' + error.message);
-        });
-}
+        }
 
 
         // Show the event list and hide registration details
@@ -319,64 +362,64 @@
             document.getElementById('eventsTable').classList.remove('hidden');
             document.getElementById('registrationDetails').classList.add('hidden');
             document.getElementById('backButton').classList.add('hidden');
-    
+
             // Reset the header text back to "Manage Events"
             const header = document.querySelector('.container h1');
             header.textContent = 'Manage Events';
         }
-    
+
         function deleteEvent(eventId, event) {
-    event.stopPropagation(); // Prevent the row click event from firing
+            event.stopPropagation(); // Prevent the row click event from firing
 
-    fetch(`http://localhost:8082/events?eventId=${eventId}`, {
-        method: 'DELETE'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
+            fetch(`http://localhost:8082/events?eventId=${eventId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    // Check the content type of the response
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.includes("application/json")) {
+                        return response.json();
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                    // Clear previous messages
+                    document.getElementById('manageResponseMessage').textContent = '';
+
+                    // Check if data is a string (text response)
+                    if (typeof data === 'string') {
+                        console.log('Server message:', data); // Log the text message
+                        document.getElementById('manageResponseMessage').textContent = data; // Show the message in your UI
+                    } else {
+                        console.log('Event deleted successfully:', data);
+                        document.getElementById('manageResponseMessage').textContent = "Event deleted successfully!";
+                    }
+
+                    // Wait a moment before re-fetching events to allow for server processing
+                    setTimeout(fetchEvents, 500); // Adjust delay as needed (500ms here)
+                })
+                .catch(error => {
+                    console.error('Error deleting event:', error);
+                    document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`; // Show error message
+                });
         }
-        // Check the content type of the response
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-            return response.json(); // Parse JSON if the content type is application/json
-        } else {
-            return response.text(); // Otherwise, return the response as text
-        }
-    })
-    .then(data => {
-        // Clear previous messages
-        document.getElementById('manageResponseMessage').textContent = '';
-
-        // Check if data is a string (text response)
-        if (typeof data === 'string') {
-            console.log('Server message:', data); // Log the text message
-            document.getElementById('manageResponseMessage').textContent = data; // Show the message in your UI
-        } else {
-            console.log('Event deleted successfully:', data);
-            document.getElementById('manageResponseMessage').textContent = "Event deleted successfully!";
-        }
-        
-        // Wait a moment before re-fetching events to allow for server processing
-        setTimeout(fetchEvents, 500); // Adjust delay as needed (500ms here)
-    })
-    .catch(error => {
-        console.error('Error deleting event:', error);
-        document.getElementById('manageResponseMessage').textContent = `Error: ${error.message}`; // Show error message
-    });
-}
 
 
 
 
 
-    
+
         // Function to handle event editing
         function editEvent(eventId) {
             const newTitle = prompt('Enter the new title for the event:');
             const newDescription = prompt('Enter the new description for the event:');
             const newDate = prompt('Enter the new date (YYYY-MM-DD) for the event:');
             const newLocation = prompt('Enter the new location for the event:');
-    
+
             if (newTitle && newDescription && newDate && newLocation) {
                 const updatedEvent = {
                     id: eventId,
@@ -385,7 +428,7 @@
                     date: newDate,
                     location: newLocation
                 };
-    
+
                 // Update PUT request to include eventId in the URL
                 fetch(`http://localhost:8082/events/${eventId}`, {
                     method: 'PUT',
@@ -409,12 +452,12 @@
                 alert('Please fill in all the details for the event.');
             }
         }
-    
+
         // Simulated function to retrieve the logged-in username
         function getLoggedInUsername() {
             return "adminUsername"; // Example username; change accordingly
         }
-    
+
         // Fetch events when the page loads
         document.addEventListener('DOMContentLoaded', fetchEvents);
     </script>
