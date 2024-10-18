@@ -17,7 +17,7 @@
         html,
         body {
             height: 100%;
-            overflow: hidden;
+            overflow-y: auto;
             scroll-behavior: smooth;
         }
 
@@ -29,6 +29,7 @@
             align-items: center;
             transition: background-color 0.5s ease;
             padding-top: 60px;
+            margin-top: -40px;
         }
 
 
@@ -43,10 +44,10 @@
         .navbar {
             width: 95%;
             margin: auto;
-            padding-top: -90px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0;
         }
 
         .logo {
@@ -104,7 +105,6 @@
         .map-container {
             width: 50%;
             border-radius: 30px;
-            /* Top-left and top-right corners rounded, bottom-left and bottom-right corners square */
             overflow: hidden;
 
         }
@@ -113,10 +113,8 @@
         .contact-info {
             display: flex;
             flex-wrap: wrap;
-            /* Allows the items to wrap on smaller screens */
             padding: 8%;
-            gap: 300px;
-            /* Adds space between the details and image */
+            gap: 50px;
         }
 
         .contact-info .details {
@@ -129,7 +127,6 @@
             max-width: 600px;
             max-height: fit-content;
             color: rgb(255, 255, 255);
-            /* Set text color to contrast with the background image */
         }
 
         .contact-info .details p {
@@ -153,16 +150,14 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            /* Centers the image horizontally */
             align-items: center;
-            /* Centers the image vertically */
             padding: 20px;
         }
 
         .contact-info .image img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -170,7 +165,6 @@
         @media (max-width: 768px) {
             .contact-info {
                 flex-direction: column;
-                /* Stack the items vertically on smaller screens */
                 padding: 10px;
             }
 
@@ -178,19 +172,20 @@
             .contact-info .image {
                 padding: 10px;
                 flex: none;
-                /* Make each item take full width in the stacked layout */
             }
         }
 
         .contact-section {
-            padding-top: 5%;
-            padding-left: 5%;
-            padding-right: 0%;
-            width: 90%;
-            max-width: 1200px;
-            margin-left: 15%;
             text-align: center;
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
         }
+
 
         .title h1 {
             font-size: 3rem;
@@ -225,11 +220,13 @@
         .contact-form h2 {
             font-size: 1.5rem;
             margin-bottom: 10px;
+            font-size: 2em;
         }
 
         .contact-form p {
             font-size: 1rem;
             margin-bottom: 20px;
+            color: #c4bcbc;
         }
 
         .contact-form input,
@@ -237,31 +234,34 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
-            background: #1a1a1a;
+            background: #59475d;
             border: 1px solid #333;
-            border-radius: 5px;
+            border-radius: 20px;
             color: white;
         }
 
         .contact-form input::placeholder,
         .contact-form textarea::placeholder {
-            color: #888;
+            color: #b0a5b5;
         }
 
         .contact-form button {
-            width: 100%;
+            width: 45%;
             padding: 12px;
             background: #b784f9;
             border: none;
-            border-radius: 5px;
-            color: white;
+            border-radius: 25px;
+            color: rgb(235, 212, 242);
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .contact-form button:hover {
-            background: #a15dd4;
+
+            background: #642a8f;
+            transform: scale(1.05);
+            color: #fff;
         }
 
         .astronaut-section {
@@ -281,7 +281,17 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
+        .contact-intro {
 
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(100px);
+            border-radius: 12px;
+            color: azure;
+            width: 30%;
+            font-family: a;
+            padding: 80px;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -304,7 +314,6 @@
         <img src="/Images/logo.png" class="logo">
         <ul>
             <li><a href="/HTML/home.html">Home</a></li>
-            <li><a href="#">Events</a></li>
             <li><a href="/HTML/aboutus.html">About us</a></li>
             <li><a href="/HTML/contact.html">Contact us</a></li>
         </ul>
@@ -316,28 +325,15 @@
             type="video/mp4">
     </video>
 
-    <div class="section" id="section1" style="display: flex;
-            justify-content: space-between;
-            padding: 40px;
-            gap: 300px;">
+    <div class="section" id="section1"
+        style="display: flex; justify-content: center; padding: 40px; max-width: 85%; margin: 0 auto;">
         <img src="/Images/FrontEndimage/contact.png" alt="Description of the image"
-            style="width: 40%; height: 80%; margin-top: 8%;  margin-left: auto;" />
-
-        <section class="contact-intro" style=" 
-        justify-content: space-between;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(100px);
-        border-radius: 12px;
-        color: azure;
-        font-family: a;
-        padding: 80px;">
-            <h1 style="font-size: 60px;text-align: center;">Available Always!</h1><br>
-            <h1 style="font-size: 60px;text-align: center;">Feel Free To</h1><br>
-            <h1 style="font-size: 60px;text-align: center;">Contact Us</h1>
-            <br>
-
+            style="width: 40%; height: auto; margin-top: 8%; margin-right: 20px;" />
+        <section class="contact-intro" style="flex: 1;">
+            <h1 style="font-size: 60px; text-align: center;">Available Always!<br>
+                Feel Free To<br>
+                Contact Us</h1>
         </section>
-
     </div>
 
 
@@ -352,7 +348,8 @@
             </div>
 
             <!-- Form and Image Container -->
-            <div class="form-image-container">
+            <div class="form-image-container"
+                style="display: flex; justify-content: center; align-items: center; gap: 20px;">
                 <!-- Contact Form -->
                 <div class="contact-form">
                     <h2>Let's connect constellations</h2>
@@ -369,7 +366,6 @@
                         <textarea name="message" placeholder="Message" rows="5" required></textarea>
                         <button type="submit">Send it to the moon 🚀</button>
                     </form>
-
                 </div>
 
                 <!-- Image and Quote Section -->
@@ -386,19 +382,18 @@
                 <div class="details">
                     <h2>Contact Us</h2>
                     <p style="color: #a3a9b7;font-weight: bolder;font-size: 35px;"> Address</p>
-                    <p> 172 Mill Road,<br> Colombo, <br>Country</p>
+                    <p> Faculty of Information Technology,<br> University of Moratuwa, <br>Sri Lanka.</p>
                     <p style="color: #b4b7bd;font-weight: bolder;font-size: 35px;">Email</p>
-                    <p>happy@gmail.com</p>
+                    <p>happyeventservice7@gmail.com</p>
                     <p style="color: #b3b7c0;font-weight: bolder;font-size: 35px;">Phone</p>
-                    <p>021-226-7890</p>
+                    <p>(+94)11 22 33 444</p>
                 </div>
                 <!-- Map Section -->
                 <div class="map-container">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345098916!2d144.95543131568095!3d-37.81720974202186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f24b8a9f%3A0x5045675218ce6e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sin!4v1601594817447!5m2!1sen!2sin"
-                        width="100%" height="650" frameborder="0" style="border:0;" allowfullscreen=""
-                        aria-hidden="false" tabindex="0">
-                    </iframe>
+                        src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d2120.8564613785793!2d79.90113991278403!3d6.796037755317885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m5!1s0x3ae2454165adf66b%3A0x6c696d5135897cf8!2sFaculty%20of%20Information%20Technology!3m2!1d6.7970862!2d79.9019094!4m0!5e0!3m2!1sen!2slk!4v1729277737324!5m2!1sen!2slk"
+                        width="600" height="650" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
 
@@ -407,12 +402,15 @@
 
     </div>
 
-    <script>
-        let currentSection = 0;
-        const sections = document.querySelectorAll('.section');
+    <script>let isThrottled = false; // Prevents multiple rapid scroll events
 
-        // Scroll functionality using mouse wheel
         document.addEventListener('wheel', function (event) {
+            event.preventDefault(); // Prevent default scrolling behavior
+
+            if (isThrottled) return; // Ignore if still throttled
+            isThrottled = true; // Set throttle
+
+            // Check for trackpad scrolling direction
             if (event.deltaY > 0) {
                 // Scroll down
                 currentSection = Math.min(currentSection + 1, sections.length - 1);
@@ -421,8 +419,33 @@
                 currentSection = Math.max(currentSection - 1, 0);
             }
             sections[currentSection].scrollIntoView({ behavior: 'smooth' });
+
+            // Reset throttle after a short delay
+            setTimeout(() => {
+                isThrottled = false;
+            }, 600); // Adjust the timeout as needed
         });
 
+        // Navbar link smooth scrolling
+        const navbarLinks = document.querySelectorAll('.navbar a');
+
+        navbarLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                const href = this.getAttribute('href');
+
+                // Check if the link points to an external page like "home.html"
+                if (href.startsWith("#")) {
+                    // Prevent default only if it's an anchor link
+                    event.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+                // If the href doesn't start with a hash, the browser will handle it normally
+            });
+        });
 
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form");
@@ -460,7 +483,6 @@
                     });
             });
         });
-
     </script>
 </body>
 
