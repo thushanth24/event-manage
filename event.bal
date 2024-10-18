@@ -91,3 +91,29 @@ isolated function updateEvent(EventRecord updatedEvent) returns boolean|error {
         return false; // Return false if no rows were affected (event not found)
     }
 }
+
+// Define the MessageRecord type
+public type MessageRecord record {
+    string firstName;
+    string lastName;
+    string email;
+    string phonenumber;
+    string message;
+};
+
+
+// Function to store message information in MySQL
+isolated function storeMessage(MessageRecord newMessage) returns int|error {
+    sql:ExecutionResult result = check eventDbClient->execute(`
+        INSERT INTO messages (firstname, lastname, email, phonenumber, message)
+        VALUES (${newMessage.firstName}, ${newMessage.lastName}, ${newMessage.email},
+                ${newMessage.phonenumber}, ${newMessage.message})
+    `);
+    int|string? lastInsertId = result.lastInsertId;
+    if lastInsertId is int {
+        return lastInsertId;  // Return the ID of the newly created message
+    } else {
+        return error("Unable to obtain last insert ID");
+    }
+}
+
