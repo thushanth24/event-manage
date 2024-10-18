@@ -1,37 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
-    <link rel="stylesheet" href="/HTML/contact.css">
+    <link rel="icon" href="/Images/contactIcon.png">
     <style>
-        
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }
+
+
+
+        .section {
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.5s ease;
+            padding-top: 60px;
+        }
+
+
+
+        body {
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 95%;
+            margin: auto;
+            padding-top: -90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            width: 500px;
+            height: 150px;
+            cursor: pointer;
+        }
+
+        .navbar ul li {
+            list-style: none;
+            display: inline-block;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            text-transform: uppercase;
+
+        }
+
+        .navbar ul li::after {
+            content: '';
+            height: 3px;
+            width: 0;
+            background: #009688;
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            transition: 0.5s;
+        }
+
+        .navbar ul li:hover::after {
+            width: 100%;
+        }
+
+        /* Hide scrollbar */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fullscreen Video Background */
+        .video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        /* Map Section */
+        .map-container {
+            width: 50%;
+            border-radius: 30px;
+            /* Top-left and top-right corners rounded, bottom-left and bottom-right corners square */
+            overflow: hidden;
+
+        }
+
+        /* Contact Info Section */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allows the items to wrap on smaller screens */
+            padding: 8%;
+            gap: 300px;
+            /* Adds space between the details and image */
+        }
+
+        .contact-info .details {
+            background: rgba(155, 113, 180, 0.2);
+            backdrop-filter: blur(50px);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
+            flex: 1;
+            max-width: 600px;
+            max-height: fit-content;
+            color: rgb(255, 255, 255);
+            /* Set text color to contrast with the background image */
+        }
+
+        .contact-info .details p {
+            color: rgb(255, 255, 255);
+            padding-left: 0%;
+            margin: 30px 0;
+            font-size: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .contact-info .details h2 {
+            padding-top: 17%;
+            padding-right: 4%;
+            font-size: 60px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .contact-info .image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            /* Centers the image horizontally */
+            align-items: center;
+            /* Centers the image vertically */
+            padding: 20px;
+        }
+
+        .contact-info .image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .contact-info {
+                flex-direction: column;
+                /* Stack the items vertically on smaller screens */
+                padding: 10px;
+            }
+
+            .contact-info .details,
+            .contact-info .image {
+                padding: 10px;
+                flex: none;
+                /* Make each item take full width in the stacked layout */
+            }
+        }
+
+        .contact-section {
+            padding-top: 5%;
+            padding-left: 5%;
+            padding-right: 0%;
+            width: 90%;
+            max-width: 1200px;
+            margin-left: 15%;
+            text-align: center;
+        }
+
+        .title h1 {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .title .highlight {
+            color: #b784f9;
+        }
+
+        .title p {
+            font-size: 1.2rem;
+            margin: 10px 0 40px;
+            color: #ccc;
+        }
+
+
+        .form-image-container {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .contact-form {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .contact-form h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-form p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: #888;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 12px;
+            background: #b784f9;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: #a15dd4;
+        }
+
+        .astronaut-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .astronaut-section img {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-image-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .astronaut-section img {
+                width: 200px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <img src="/Images/logo.png" class="logo" alt="Logo">
+        <img src="/Images/logo.png" class="logo">
         <ul>
             <li><a href="/HTML/home.html">Home</a></li>
             <li><a href="#">Events</a></li>
             <li><a href="/HTML/aboutus.html">About us</a></li>
-            <li><a href="#">Contact us</a></li>
+            <li><a href="/HTML/contact.html">Contact us</a></li>
         </ul>
     </div>
 
     <!-- Fullscreen Video Background -->
     <video autoplay muted loop class="video-background">
-        <source src="/Images/FrontEndimage/Neon Rounded Purple lines Abstract Gradient Background Animation .mp4" type="video/mp4">
+        <source src="/Images/FrontEndimage/Neon Rounded Purple lines Abstract Gradient Background Animation .mp4"
+            type="video/mp4">
     </video>
 
     <div class="section" id="section1" style="display: flex;
             justify-content: space-between;
             padding: 40px;
             gap: 300px;">
-        <img src="/Images/FrontEndimage/contact.png"  alt="Description of the image"  style="width: 40%; height: 80%; margin-top: 8%;  margin-left: auto;" />
+        <img src="/Images/FrontEndimage/contact.png" alt="Description of the image"
+            style="width: 40%; height: 80%; margin-top: 8%;  margin-left: auto;" />
 
         <section class="contact-intro" style=" 
         justify-content: space-between;
@@ -45,13 +335,13 @@
             <h1 style="font-size: 60px;text-align: center;">Feel Free To</h1><br>
             <h1 style="font-size: 60px;text-align: center;">Contact Us</h1>
             <br>
-            
+
         </section>
 
     </div>
-    
 
-    
+
+
     <div class="section" id="section3">
 
         <section class="contact-section">
@@ -60,14 +350,15 @@
                 <h1>Get in <span class="highlight">touch</span></h1>
                 <p>Reach out, and let's create a universe of possibilities together!</p>
             </div>
-    
+
             <!-- Form and Image Container -->
             <div class="form-image-container">
                 <!-- Contact Form -->
                 <div class="contact-form">
                     <h2>Let's connect constellations</h2>
-                    <p>Let's align our constellations! Reach out and let the magic of collaboration illuminate our skies.</p>
-                    
+                    <p>Let's align our constellations! Reach out and let the magic of collaboration illuminate our
+                        skies.</p>
+
                     <form>
                         <div class="form-group">
                             <input type="text" name="firstName" placeholder="First Name" required>
@@ -78,9 +369,9 @@
                         <textarea name="message" placeholder="Message" rows="5" required></textarea>
                         <button type="submit">Send it to the moon 🚀</button>
                     </form>
-                    
+
                 </div>
-    
+
                 <!-- Image and Quote Section -->
                 <div class="astronaut-section">
                     <img src="/Images/FrontEndimage/—Pngtree—contact us 24 hours_5410729.png" alt="Astronaut Image">
@@ -94,36 +385,83 @@
             <div class="contact-info">
                 <div class="details">
                     <h2>Contact Us</h2>
-                    <p style="color: #a3a9b7;font-weight: bolder;font-size: 35px;"> Address</p><p> 172 Mill Road,<br> Colombo, <br>Country</p>
-                    <p style="color: #b4b7bd;font-weight: bolder;font-size: 35px;">Email</p> <p>happy@gmail.com</p>
-                    <p style="color: #b3b7c0;font-weight: bolder;font-size: 35px;">Phone</p><p>021-226-7890</p>
+                    <p style="color: #a3a9b7;font-weight: bolder;font-size: 35px;"> Address</p>
+                    <p> 172 Mill Road,<br> Colombo, <br>Country</p>
+                    <p style="color: #b4b7bd;font-weight: bolder;font-size: 35px;">Email</p>
+                    <p>happy@gmail.com</p>
+                    <p style="color: #b3b7c0;font-weight: bolder;font-size: 35px;">Phone</p>
+                    <p>021-226-7890</p>
                 </div>
                 <!-- Map Section -->
-            <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345098916!2d144.95543131568095!3d-37.81720974202186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f24b8a9f%3A0x5045675218ce6e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sin!4v1601594817447!5m2!1sen!2sin" 
-                    width="100%" 
-                    height="650" 
-                    frameborder="0" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    aria-hidden="false" 
-                    tabindex="0">
-                </iframe>
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345098916!2d144.95543131568095!3d-37.81720974202186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f24b8a9f%3A0x5045675218ce6e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sin!4v1601594817447!5m2!1sen!2sin"
+                        width="100%" height="650" frameborder="0" style="border:0;" allowfullscreen=""
+                        aria-hidden="false" tabindex="0">
+                    </iframe>
+                </div>
             </div>
-            </div>
-    
+
         </div>
-        
+
 
     </div>
 
-    
+    <script>
+        let currentSection = 0;
+        const sections = document.querySelectorAll('.section');
 
-    <script src="script.js"></script>
+        // Scroll functionality using mouse wheel
+        document.addEventListener('wheel', function (event) {
+            if (event.deltaY > 0) {
+                // Scroll down
+                currentSection = Math.min(currentSection + 1, sections.length - 1);
+            } else {
+                // Scroll up
+                currentSection = Math.max(currentSection - 1, 0);
+            }
+            sections[currentSection].scrollIntoView({ behavior: 'smooth' });
+        });
 
-    
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevents the default form submission
 
+                // Gather input values
+                const formData = {
+                    firstName: form.firstName.value,
+                    lastName: form.lastName.value,
+                    email: form.email.value,
+                    phonenumber: form.phonenumber.value,
+                    message: form.message.value
+                };
+
+                // Send data to your Ballerina API
+                fetch("http://localhost:8087/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Message sent successfully! 🚀'); // Alert for successful message sending
+                            form.reset(); // Reset the form after successful submission
+                        } else {
+                            alert('Failed to send message. Please try again.'); // Alert for failure
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.'); // Alert for catch errors
+                    });
+            });
+        });
+
+    </script>
 </body>
+
 </html>
