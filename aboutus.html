@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About US</title>
+    <!-- Embedded CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 1.0;
+        }
+
+        /*Header */
+        header {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+        }
+
+        /* Navigation Bar*/
+
+        nav {
+            display: flex;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.2em;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #3a78c1;
+            border-radius: 5px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-slide {
+            display: flex;
+            width: 400%;
+            /* This should match the number of images times 100% */
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide img {
+            width: 25%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        /* Sections styling */
+        .about-section,
+        .vision-section,
+        .service-section,
+        .team-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-section {
+            background: rgba(192, 174, 233, 0.3);
+            backdrop-filter: blur(10px);
+            margin: 40px auto;
+            width: 80%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .about-section p {
+            text-align: center;
+            color: #d0d1da;
+        }
+
+        .about-section h2 {
+            text-align: center;
+            background: linear-gradient(45deg, #b4af0f, #c86f21, #b4af0f,#c86f21);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            font-size: 2.8em;
+            /* Increase the font size */
+        }
+
+
+        .visionContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        .vision-section {
+            width: 46%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .visionImage img {
+            width: 70%;
+            height: 70%;
+            height: auto;
+        }
+
+        .vision-section p {
+            text-align: right;
+            color: #d0d1da;
+        }
+
+        .vision-section h2 {
+            color: rgb(214, 212, 220);
+            text-align: center;
+            padding: 10px;
+            background: rgba(133, 128, 128, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vision-section h2:hover {
+            transform: scale(1.02);
+            background: linear-gradient(45deg, #b4af0f, #a74f03, #cd7905);
+            color: #fff;
+
+        }
+
+        .service-section {
+            width: 46%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .serviceContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+
+        }
+
+        .service-section p {
+            text-align: left;
+            color: #d0d1da;
+        }
+
+        .service-section h3 {
+            background: linear-gradient(45deg, #b4af0f, #c86f21, #b4af0f, #b4af0f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+
+        }
+
+        .service-section h2 {
+            color: rgb(214, 212, 220);
+            text-align: center;
+            padding: 10px;
+            background: rgba(133, 128, 128, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-section h2:hover {
+            transform: scale(1.02);
+            background: linear-gradient(45deg, #b4af0f, #a74f03, #cd7905);
+            color: #fff;
+
+        }
+
+        /* Transitions between sections */
+        .about-section:hover,
+        .service-section:hover,
+        .vision-section:hover {
+            transform: scale(1.03);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Team Section Styling */
+        .team-section {
+            text-align: center;
+            padding: 50px 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            position: relative;
+            width: 20%;
+            height: 40vh;
+            margin: 20px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Glass effect for name overlay */
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Hover effect */
+        .team-member:hover .photo {
+            transform: scale(1.08);
+        }
+
+        .team-member:hover .overlay {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        .visionContainer,
+        .serviceContainer {
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #262654;
+            padding: 40px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        /* Reduce gap between footer sections */
+        .footer-section {
+            margin: 1px;
+        }
+
+        /* Align copyright text at the bottom */
+        footer .footer-section:last-child {
+            flex-basis: 100%;
+            text-align: right;
+            margin-top: auto;
+        }
+
+        .social-icons {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            /* Add horizontal space between icons */
+        }
+
+        .footer-section h3 {
+            margin-bottom: 10px;
+            color: rgb(210, 203, 222);
+        }
+
+        .footer-section p {
+            color: rgb(152, 149, 158);
+        }
+
+        .footer-section a {
+            color: #bbb;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-section a:hover {
+            color: #ea9218;
+        }
+
+        .social-icons img {
+            width: 30px;
+            transition: transform 0.3s;
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Video -->
+    <video autoplay muted loop class="background-video">
+        <source src="/Images/FrontEndimage/4K 2160p Blue Ambient Waving Lines Motion Background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Reusable Header -->
+    <header>
+        <img src="/Images/FrontEndimage/logo.png">
+        <nav>
+            <a href="/HTML/home.html">HOME</a>
+            <a href="#">EVENTS</a>
+            <a href="#">CONTACT US</a>
+            <a href="/HTML/aboutus.html">ABOUT US</a>
+        </nav>
+    </header>
+
+    <!-- Image Carousel -->
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            <img src="/Images/FrontEndimage/slider1.jpg" alt="Slide 1">
+            <img src="/Images/FrontEndimage/slider2.jpg" alt="Slide 2">
+            <img src="/Images/FrontEndimage/slider3.jpg" alt="Slide 3">
+            <img src="/Images/FrontEndimage/slider1.jpg" alt="Slide 4">
+        </div>
+    </div>
+
+
+    <!-- About Section -->
+    <div class="about-section">
+        <h2>WHO WE ARE ?</h2><br>
+        <p>" Welcome to <strong>Happy Events</strong>, the event management platform developed by a group of four
+            passionate second-year
+            undergraduates from the <strong> Faculty of Information Technology</strong> at the <strong> University of
+                Moratuwa.</strong>"<br><br>
+            As tech enthusiasts, we created Happy Events to streamline event organization and provide an efficient
+            solution for all your event management needs. Our platform is designed to cater to events of all scales,
+            ensuring a seamless experience whether you're planning a corporate event, social gathering, or any special
+            occasion.<br><br>
+
+            We pride ourselves on delivering not only technical efficiency but also an impactful and user-friendly
+            experience. With a focus on innovation and creativity, Happy Events brings together our technical skills and
+            dedication to provide a solution that takes care of the details, allowing you to focus on creating
+            unforgettable memories.</p>
+    </div>
+
+    <!-- Vision Section -->
+    <div class="visionContainer">
+        <!-- Service Image -->
+        <div class="visionImage">
+            <img src="/Images/FrontEndimage/visionIcon.png" alt="Service Image">
+        </div>
+
+        <!-- Vision Section -->
+        <div class="vision-section">
+            <h2>OUR VISION</h2><br><br>
+            <p>At Happy Events, our vision is to bridge the gap between event organizers and their audiences by
+                delivering a
+                seamless, tech-driven experience. We aim to create a platform where organizing and attending events
+                becomes
+                effortless and efficient, providing organizers with the tools they need to manage events smoothly while
+                ensuring attendees have a hassle-free experience.<br><br>
+
+                By leveraging innovative solutions, we strive to redefine how events are planned and experienced. Our
+                goal
+                is to make every moment memorable for both organizers and participants, ensuring that from the planning
+                stage to the event day, everything flows perfectly and leaves a lasting impression.</p>
+        </div>
+    </div>
+    <!-- Vision Section -->
+    <div class="serviceContainer">
+        <div class="service-section">
+            <h2>SERVICES</h2><br><br>
+            <p>We offer a wide range of services designed to deliver a smooth and engaging event management
+                experience.</p><br>
+
+            <h3>Full Stack Development:</h3>
+            <p>Our team specializes in end-to-end web development, creating robust, scalable, and
+                efficient platforms tailored to your event management needs.</p><br>
+
+            <h3>UI/UX Design:</h3>
+            <p>We prioritize user experience and design intuitive interfaces that are not only visually
+                appealing but also easy to navigate, ensuring a seamless journey for both organizers and attendees.</p>
+            <br>
+
+            <h3>3D Integration:</h3>
+            <p>With cutting-edge 3D integration, we bring a dynamic and interactive dimension to your
+                events, enhancing user engagement and offering a truly immersive experience.
+                From concept to execution, our services are crafted to make event planning and participation effortless
+                and
+                exciting.</p>
+        </div>
+        <div class="serviceImage">
+            <img src="/Images/FrontEndimage/serviceIcon.png" alt="Service Image">
+        </div>
+    </div><br>
+
+    <!-- Team Section -->
+    <div class="team-section">
+        <h2>Meet Our Team</h2><br>
+        <p>Our team consists of developers, designers, and analysts who work together to achieve greatness.</p>
+
+        <div class="team-container">
+            <!-- Team Member 1 -->
+            <div class="team-member">
+                <div class="photo" style="background-image: url('/Images/FrontEndimage/thusha.jpg');"></div>
+                <div class="overlay">
+                    <h3>THUSHANTH. M</h3>
+                </div>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-member">
+                <div class="photo" style="background-image: url('/Images/FrontEndimage/nive.jpg');"></div>
+                <div class="overlay">
+                    <h3>NIVETHAN. R</h3>
+                </div>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-member">
+                <div class="photo" style="background-image: url('/Images/FrontEndimage/jey.jpg');"></div>
+                <div class="overlay">
+                    <h3>CHAJEYRAJ. K</h3>
+                </div>
+            </div>
+
+            <!-- Team Member 4 -->
+            <div class="team-member">
+                <div class="photo" style="background-image: url('/Images/FrontEndimage/rishi.jpg');"></div>
+                <div class="overlay">
+                    <h3>RISHIGOBAN. J</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Reusable Footer -->
+    <footer>
+        <div class="footer-section">
+            <h3>Help & Enquiry</h3>
+            <a href="#">FAQs</a>
+            <a href="#">Contact Support</a>
+        </div>
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p>happyevents@gmail.com</p>
+            <p>+94 11 22 33 444</p>
+        </div>
+        <div class="footer-section">
+            <h3>Location</h3>
+            <p>Faculty of Information Technology,<br>
+                University of Moratuwa,<br>
+                Sri Lanka.
+            </p>
+        </div>
+        <div class="footer-section social-icons">
+            <h3>Follow Us On :</h3>
+            <a href="#"><img src="/Images/FrontEndimage/facebook.png"></a>
+            <a href="#"><img src="/Images/FrontEndimage/instagram.png"></a>
+            <a href="#"><img src="/Images/FrontEndimage/twitter.png"></a>
+        </div>
+        <div class="footer-section">
+            <p>© 2024 Batch 22. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Embedded JavaScript for Scroll Animations -->
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide img');
+        const totalSlides = slides.length;
+
+        function autoSlide() {
+            currentIndex++;
+            if (currentIndex >= totalSlides) {
+                currentIndex = 0; // Reset to the first slide after the last
+            }
+            document.querySelector('.carousel-slide').style.transform = `translateX(${-currentIndex * 25}%)`; // 25% for each slide
+        }
+
+        // Auto-slide every 3 seconds
+        setInterval(autoSlide, 3000);
+
+
+        const sections = document.querySelectorAll('.scroll-animation');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top + window.scrollY - window.innerHeight + 100;
+
+                if (scrollY > sectionTop) {
+                    section.classList.add('visible');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
