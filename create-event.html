@@ -106,6 +106,10 @@
             z-index: 0;
         }
 
+        #eventResponseMessage{
+            color: aquamarine;
+        }
+
     </style>
 </head>
 
@@ -167,7 +171,7 @@
                     return response.text();
                 })
                 .then(data => {
-                    document.getElementById('eventResponseMessage').textContent = `Event created successfully: ${data}`;
+                    document.getElementById('eventResponseMessage').textContent = `Event successfully created !`;
                     document.getElementById('createEventForm').reset(); // Reset the form after successful submission
                 })
                 .catch(error => {
