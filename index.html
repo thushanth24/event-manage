@@ -18,35 +18,29 @@
             margin: 0;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: 30%;
-            height: 60%;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
+        .container,
         .createAccountCont {
             background: rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: 35%;
-            height: 85%;
             text-align: center;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-
         }
 
-        .divider1 {
-            color: #7f7b7b;
+        .container {
+            width: 30%;
+            height: 60%;
+        }
+
+        .createAccountCont {
+            width: 35%;
+            height: 85%;
+        }
+        .createAccountCont p{
+            color: #fff;
         }
 
         h1,
@@ -57,30 +51,29 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-
-        }
-
-        input {
-            color: inherit;
-            width: 60%;
-            padding: 8px;
-            margin-bottom: 10px;
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid #6480dd;
-            padding-left: 1.8rem;
-            font-size: 15px;
         }
 
         .input-group {
-            padding: 1% 0;
+            padding: 15px 0;
             position: relative;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            color: white;
+            font-size: 16px;
+            transition: border-bottom 0.3s ease;
         }
 
         input:focus {
-            background-color: transparent;
-            outline: transparent;
-            border-bottom: 2px solid hsl(152, 94%, 14%);
+            outline: none;
+            border-bottom: 2px solid #22df7a;;
         }
 
         input::placeholder {
@@ -88,20 +81,24 @@
         }
 
         label {
-            color: rgb(42, 2, 84);
-            position: relative;
-            left: 0.5rem;
-            top: 1.5rem;
-            cursor: auto;
-            transition: 0.3s ease all;
-            margin: 10px 0 5px;
+            position: absolute;
+            left: 1.0rem;
+            top: 10px;
+            color: #bbb;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
 
         input:focus~label,
         input:not(:placeholder-shown)~label {
-            top: -3em;
-            color: hsl(13, 90%, 28%);
-            font-size: 15px;
+            top: -10px;
+            font-size: 12px;
+            color: #22df7a;
+        }
+
+        .divider1{
+            color: #fff;
         }
 
         button {
@@ -122,15 +119,13 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
-
         #responseMessage {
             margin-top: 10px;
-            color: rgb(214, 30, 30);
+            color: rgb(105, 21, 161);
         }
 
         #createAccountContainer {
             display: none;
-            /* Initially hide the create account form */
         }
     </style>
 </head>
@@ -150,16 +145,16 @@
     </div>
 
     <div class="container" id="adminContainer" style="display: none;">
-        <h1>Login as a Administrator</h1>
+        <h1>Login as a Administrator</h1><br><br>
         <form id="adminLoginForm">
             <div class="input-group">
-                <label for="adminUsername">Username:</label>
-                <input type="text" id="adminUsername" required>
+                <input type="text" id="adminUsername" placeholder=" " required>
+                <label for="adminUsername">Username</label>
             </div>
 
             <div class="input-group">
-                <label for="adminPassword">Password:</label>
-                <input type="password" id="adminPassword" required>
+                <input type="password" id="adminPassword" placeholder=" " required>
+                <label for="adminPassword">Password:</label><br>
             </div>
 
             <button type="submit">Login</button>
@@ -172,40 +167,42 @@
     </div>
 
     <div class="createAccountCont" id="createAccountContainer" style="display: none;">
-        <h1>Create an Account</h1>
+        <h1>Create an Account</h1><br>
         <form id="createAccountForm">
             <div class="input-group">
-                <label for="firstname">First Name:</label>
-                <input type="text" id="firstname" placeholder="First Name" required>
+                <input type="text" id="firstname" placeholder=" " required>
+                <label for="firstname">First Name</label>
             </div>
 
             <div class="input-group">
-                <label for="lastname">Last Name:</label>
-                <input type="text" id="lastname" placeholder="Last Name" required>
+
+                <input type="text" id="lastname" placeholder=" " required>
+                <label for="lastname">Last Name</label>
             </div>
 
             <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" placeholder=" " required>
+                <label for="email">Email</label>
             </div>
 
             <div class="input-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" placeholder="User Name" required>
+                <input type="text" id="username" placeholder=" " required>
+                <label for="username">Username</label>
             </div>
 
             <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="*********" required>
+                <input type="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
             </div>
 
             <div class="input-group">
-                <label for="phonenumber">Phone Number:</label>
-                <input type="text" id="phonenumber" placeholder="Phone Number" required>
+                <input type="text" id="phonenumber" placeholder=" " required>
+                <label for="phonenumber">Phone Number</label>
             </div>
 
             <button type="submit">Create Account</button>
         </form>
+        <p>----------------------------------------------------------------------</p>
         <p id="responseMessage"></p>
         <button class="backToLoginButton" id="backToLoginButton">Back to Login</button> <!-- Back to Login button -->
     </div>
@@ -217,9 +214,9 @@
         });
 
         document.getElementById('userButton').addEventListener('click', function () {
-    // Redirect to the user page
-    window.location.href = 'user.html';
-});
+            // Redirect to the user page
+            window.location.href = 'user.html';
+        });
 
 
         // Admin login form submission
@@ -246,7 +243,7 @@
                     return response.text(); // Assuming the response is text
                 })
                 .then(data => {
-                    document.getElementById('adminResponseMessage').textContent = `Login successful: ${data}`;
+                    document.getElementById('adminResponseMessage').textContent = `Login successful !`;
                     // Redirect to the event creation dashboard
                     window.location.href = 'dashboard.html'; // Adjust this to your actual admin dashboard page
                 })
@@ -295,8 +292,8 @@
                     return response.text(); // Assuming the response is text
                 })
                 .then(data => {
-                    document.getElementById('responseMessage').textContent = `User added with ID: ${data}`;
-                    document.getElementById('createAccountForm').reset(); // Reset the form after successful submission
+                    document.getElementById('responseMessage').textContent = `Admin account creation Successful !`;
+                    document.getElementById('createAccountForm').reset();
                 })
                 .catch(error => {
                     document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
