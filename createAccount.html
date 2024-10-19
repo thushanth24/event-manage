@@ -23,12 +23,12 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: 30%;
-            height: auto;
             text-align: center;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 35%;
+            height: 85%;
         }
 
         h1 {
@@ -41,42 +41,47 @@
         }
 
         input {
-            color: inherit;
-            width: 60%;
-            padding: 8px;
-            margin-bottom: 10px;
-            background-color: transparent;
+            width: 100%;
+            padding: 10px;
+            background: transparent;
             border: none;
-            border-bottom: 1px solid #6480dd;
-            font-size: 15px;
+            border-bottom: 2px solid #ccc;
+            color: white;
+            font-size: 16px;
+            transition: border-bottom 0.3s ease;
         }
 
         .input-group {
-            padding: 1% 0;
+            padding: 15px 0;
             position: relative;
+            width: 60%;
+            margin: 0 auto;
         }
 
         input:focus {
-            background-color: transparent;
-            outline: transparent;
-            border-bottom: 2px solid hsl(152, 94%, 14%);
+            outline: none;
+            border-bottom: 2px solid #22df7a;
+        }
+
+        input::placeholder {
+            color: transparent;
         }
 
         label {
-            color: rgb(42, 2, 84);
-            position: relative;
-            left: 0.5rem;
-            top: 1.5rem;
-            cursor: auto;
-            transition: 0.3s ease all;
-            margin: 10px 0 5px;
+            position: absolute;
+            left: 1.0rem;
+            top: 10px;
+            color: #777070;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
 
         input:focus~label,
         input:not(:placeholder-shown)~label {
-            top: -3em;
-            color: hsl(13, 90%, 28%);
-            font-size: 15px;
+            top: -7px;
+            font-size: 12px;
+            color: #22df7a;
         }
 
         button {
@@ -99,7 +104,7 @@
 
         #responseMessage {
             margin-top: 10px;
-            color: rgb(214, 30, 30);
+            color: rgb(105, 21, 161);
         }
 
         .backToLoginButton {
@@ -113,42 +118,44 @@
         <h1>Create an Account</h1>
         <form id="createAccountForm">
             <div class="input-group">
-                <label for="firstname">First Name:</label>
-                <input type="text" id="firstname" placeholder="First Name" required>
+                <input type="text" id="firstname" placeholder=" " required>
+                <label for="firstname">First Name</label>
             </div>
 
             <div class="input-group">
+                <input type="text" id="lastname" placeholder=" " required>
                 <label for="lastname">Last Name:</label>
-                <input type="text" id="lastname" placeholder="Last Name" required>
             </div>
 
             <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" placeholder=" " required>
+                <label for="email">Email</label>
             </div>
 
             <div class="input-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" placeholder="User Name" required>
+                <input type="text" id="nic" placeholder=" " required>
+                <label for="nic">NIC</label>
             </div>
 
             <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="*********" required>
+                <input type="text" id="username" placeholder=" " required>
+                <label for="username">Username</label>
             </div>
 
             <div class="input-group">
+                <input type="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
+                
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="phonenumber" placeholder=" " required>
                 <label for="phonenumber">Phone Number:</label>
-                <input type="text" id="phonenumber" placeholder="Phone Number" required>
-            </div>
-
-            <div class="input-group">
-                <label for="nic">NIC:</label>
-                <input type="text" id="nic" placeholder="NIC" required> <!-- Added NIC field -->
             </div>
 
             <button type="submit">Create Account</button>
         </form>
+        
         <p id="responseMessage"></p>
         <button class="backToLoginButton" id="backToLoginButton">Back to Login</button> <!-- Back to Login button -->
     </div>
@@ -156,14 +163,12 @@
     <script>
         // Handle back to login button click
         document.getElementById('backToLoginButton').addEventListener('click', function () {
-            // Redirect to login page
-            window.location.href = 'user.html'; // Adjust this to your actual login page
+            window.location.href = 'user.html'; 
         });
 
         // Create account form submission
         document.getElementById('createAccountForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent default form submission
-
+            event.preventDefault(); 
             const newUser = {
                 firstname: document.getElementById('firstname').value,
                 lastname: document.getElementById('lastname').value,
@@ -171,7 +176,7 @@
                 username: document.getElementById('username').value,
                 password: document.getElementById('password').value,
                 phonenumber: document.getElementById('phonenumber').value,
-                nic: document.getElementById('nic').value // Capturing NIC field value
+                nic: document.getElementById('nic').value 
             };
 
             // Fetch request for account creation
@@ -189,7 +194,7 @@
                     return response.text(); // Assuming the response is text
                 })
                 .then(data => {
-                    document.getElementById('responseMessage').textContent = `User added with ID: ${data}`;
+                    document.getElementById('responseMessage').textContent = `User account creation Successfull !`;
                     document.getElementById('createAccountForm').reset(); // Reset the form after successful submission
                 })
                 .catch(error => {
