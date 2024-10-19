@@ -257,7 +257,6 @@
     <div id="registrationContainer" class="registration-active" style="display:none;">
         <div id="registrationContent" class="registration-form-content">
             <button class="close-btn" onclick="closeRegistration()">X</button>
-            <!-- The registration form content will be dynamically injected here -->
         </div>
     </div>
 
@@ -265,29 +264,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 
     <script>
-        fetch('http://localhost:8082/events') // Adjust endpoint as necessary
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json(); // Assuming the response is in JSON format
-            })
-            .then(events => {
-                const upcomingEventsList = document.getElementById('upcomingEventsList');
-                const pastEventsList = document.getElementById('pastEventsList');
+        fetch('http://localhost:8082/events')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(events => {
+        const upcomingEventsList = document.getElementById('upcomingEventsList');
+        const pastEventsList = document.getElementById('pastEventsList');
 
-                const today = new Date(); // Current date
+        const today = new Date();
 
-                let hasUpcomingEvents = false;
-                let hasPastEvents = false;
+        let hasUpcomingEvents = false;
+        let hasPastEvents = false;
 
-                events.forEach(event => {
-                    const eventDate = new Date(event.date);
-                    const eventDiv = document.createElement('div');
-                    eventDiv.classList.add('event');
+        // Sort events by date in ascending order (earliest events first)
+        events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                    // Build event HTML structure
-                    eventDiv.innerHTML = `
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            const eventDiv = document.createElement('div');
+            eventDiv.classList.add('event');
+
+            // Build event HTML structure
+            eventDiv.innerHTML = `
                 <h2>${event.title}</h2>
                 <p><strong>Date:</strong> ${eventDate.toLocaleDateString()}</p>
                 <p><strong>Location:</strong> ${event.location}</p>
@@ -295,43 +297,38 @@
                 <button id="button-${event.id}" ${eventDate < today ? 'disabled' : ''}></button>
             `;
 
-                    // If the event is in the future (Upcoming)
-                    if (eventDate >= today) {
-                        hasUpcomingEvents = true;
-                        const button = eventDiv.querySelector(`#button-${event.id}`);
-                        button.innerText = 'Register';
-                        button.onclick = () => showRegistrationForm(event.id, event.title);
-                    }
-                    // If the event is in the past
-                    else {
-                        hasPastEvents = true;
-                        const button = eventDiv.querySelector(`#button-${event.id}`);
-                        button.innerText = 'Ended';
-                        button.style.background = 'linear-gradient(#6b0c0c, #3a0202)'; 
-                        button.style.cursor = 'not-allowed';
-                    }
+            // If the event is in the future (Upcoming)
+            if (eventDate >= today) {
+                hasUpcomingEvents = true;
+                const button = eventDiv.querySelector(`#button-${event.id}`);
+                button.innerText = 'Register';
+                button.onclick = () => showRegistrationForm(event.id, event.title);
+                upcomingEventsList.appendChild(eventDiv);
+            }
+            // If the event is in the past
+            else {
+                hasPastEvents = true;
+                const button = eventDiv.querySelector(`#button-${event.id}`);
+                button.innerText = 'Ended';
+                button.style.background = 'linear-gradient(#6b0c0c, #3a0202)';
+                button.style.cursor = 'not-allowed';
+                pastEventsList.appendChild(eventDiv);
+            }
+        });
 
-                    // Append to the appropriate list
-                    if (eventDate >= today) {
-                        upcomingEventsList.appendChild(eventDiv);
-                    } else {
-                        pastEventsList.appendChild(eventDiv);
-                    }
-                });
-
-                // Handle cases where there are no events
-                if (!hasUpcomingEvents) {
-                    upcomingEventsList.innerHTML = '<p>No upcoming events available.</p>';
-                }
-                if (!hasPastEvents) {
-                    pastEventsList.innerHTML = '<p>No past events available.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching events:', error);
-                document.getElementById('upcomingEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
-                document.getElementById('pastEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
-            });
+        // Handle cases where there are no events
+        if (!hasUpcomingEvents) {
+            upcomingEventsList.innerHTML = '<p>No upcoming events available.</p>';
+        }
+        if (!hasPastEvents) {
+            pastEventsList.innerHTML = '<p>No past events available.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching events:', error);
+        document.getElementById('upcomingEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+        document.getElementById('pastEventsList').innerHTML = `<p>Error loading events: ${error.message}</p>`;
+    });
 
 
         // Show registration form and hide other events
