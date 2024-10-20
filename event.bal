@@ -1,5 +1,6 @@
 import ballerinax/mysql;
 import ballerina/sql;
+import ballerina/email;
 
 // Define a unique EventRecord type
 public type EventRecord record {| 
@@ -101,6 +102,91 @@ public type MessageRecord record {
     string message;
 };
 
+isolated function sendContactEmail(MessageRecord message) returns error? {
+    // Initialize the SMTP client
+    email:SmtpClient smtpClient = check new ("smtp.gmail.com", "manothushanth@gmail.com", "yvowfmmgkgxzzxfn");
+
+    // Create the email message
+    email:Message email = {
+        to: message.email, 
+        subject: "New Contact Form Submission",
+        body: string `<!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                }
+                .email-container {
+                    padding: 20px;
+                    background-color: white;
+                    margin: 20px auto;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                .email-header {
+                    font-size: 18px;
+                    color: #333333;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                .email-body {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #555555;
+                }
+                .contact-details {
+                    margin-top: 20px;
+                    padding: 10px;
+                    background-color: #f9f9f9;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 5px;
+                }
+                .email-footer {
+                    margin-top: 30px;
+                    font-size: 14px;
+                    color: #777777;
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="email-header">
+                    <strong>New Contact Form Submission</strong>
+                </div>
+                <div class="email-body">
+                    <p>Dear Event Team,</p>
+                    <p>You have received a new message from the contact form!</p>
+                    <div class="contact-details">
+                        <p><strong>First Name:</strong> ${message.firstName}</p>
+                        <p><strong>Last Name:</strong> ${message.lastName}</p>
+                        <p><strong>Email:</strong> ${message.email}</p>
+                        <p><strong>Phone:</strong> ${message.phonenumber}</p>
+                        <p><strong>Message:</strong> ${message.message}</p>
+                    </div>
+                    <p>Best regards,</p>
+                    <p><strong>Happy Events</strong></p>
+                </div>
+                <div class="email-footer">
+                    <p>&copy; 2024 Happy Events | All rights reserved</p>
+                </div>
+            </div>
+        </body>
+        </html>`,
+        contentType: "text/html" // Set the content type to HTML
+    };
+
+    // Send the email
+    check smtpClient->sendMessage(email);
+}
+
+
 
 // Function to store message information in MySQL
 isolated function storeMessage(MessageRecord newMessage) returns int|error {
@@ -111,9 +197,14 @@ isolated function storeMessage(MessageRecord newMessage) returns int|error {
     `);
     int|string? lastInsertId = result.lastInsertId;
     if lastInsertId is int {
+        // Call the email function directly
+    check sendContactEmail(newMessage); // Replace with sendRegistrationEmail if that's your intended function
+
         return lastInsertId;  // Return the ID of the newly created message
     } else {
         return error("Unable to obtain last insert ID");
     }
 }
+
+
 

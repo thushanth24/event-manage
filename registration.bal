@@ -24,18 +24,89 @@ final mysql:Client registrationDbClient = check new(
     host=EVENT_DB_HOST, user=EVENT_DB_USER, password=EVENT_DB_PASSWORD, port=EVENT_DB_PORT, database=EVENT_DB_DATABASE
 );
 
-// Function to send registration confirmation email
 isolated function sendRegistrationEmail(RegistrationRecord registration) returns error? {
     email:SmtpClient smtpClient = check new ("smtp.gmail.com", "manothushanth@gmail.com", "yvowfmmgkgxzzxfn");
 
     email:Message email = {
-        to: registration.email, // Send the email to the user's email
+        to: registration.email,
         subject: "Registration Confirmation",
-        body: string `Dear ${registration.name},\n\nThank you for registering for Event ID: ${registration.eventId}.\n\nBest regards,\nEvent Team`
+        body: string `<!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                }
+                .email-container {
+                    padding: 20px;
+                    background-color: white;
+                    margin: 20px auto;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                .email-header {
+                    font-size: 18px;
+                    color: #333333;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                .email-body {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #555555;
+                }
+                .event-details {
+                    margin-top: 20px;
+                    padding: 10px;
+                    background-color: #f9f9f9;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 5px;
+                }
+                .email-footer {
+                    margin-top: 30px;
+                    font-size: 14px;
+                    color: #777777;
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="email-header">
+                    <strong>Registration Confirmation</strong>
+                </div>
+                <div class="email-body">
+                    <p>Dear ${registration.name},</p>
+                    <p>Thank you for registering for the event!</p>
+                    <div class="event-details">
+                        <p><strong>Name:</strong> ${registration.name}</p>
+                        <p><strong>Email:</strong> ${registration.email}</p>
+                        <p><strong>Phone:</strong> ${registration.phonenumber}</p>
+                        <p><strong>NIC:</strong> ${registration.nic}</p>
+                    </div>
+                    <p>We look forward to seeing you at the event!</p>
+                    <p>Best regards,</p>
+                    <p><strong>Event Team</strong></p>
+                </div>
+                <div class="email-footer">
+                    <p>&copy; 2024 Event Team | All rights reserved</p>
+                </div>
+            </div>
+        </body>
+        </html>`,
+        contentType: "text/html" // Set the content type to HTML
     };
 
     check smtpClient->sendMessage(email);
 }
+
+
+
 
 // Function to register for an event and send an email
 isolated function registerForEvent(RegistrationRecord newRegistration) returns int|error {
