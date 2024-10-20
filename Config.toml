@@ -1,19 +1,19 @@
-USER="root"
-PASSWORD="karaveddy2015"
+USER=""
+PASSWORD=""
 HOST="localhost"
-PORT=3306
+PORT=
 DATABASE="management"
 
-DB_USER = "root"	
-DB_PASSWORD = "karaveddy2015"	
-DB_HOST = "localhost"	
-DB_PORT = 3306	
-DB_DATABASE = "management"	
+DB_USER = ""	
+DB_PASSWORD = ""	
+DB_HOST = ""	
+DB_PORT = 	
+DB_DATABASE = ""	
 
 
-EVENT_DB_USER = "root"	
-EVENT_DB_PASSWORD = "karaveddy2015"	
-EVENT_DB_HOST = "localhost"	
-EVENT_DB_PORT = 3306	
-EVENT_DB_DATABASE = "management"	
+EVENT_DB_USER = ""	
+EVENT_DB_PASSWORD = ""	
+EVENT_DB_HOST = ""	
+EVENT_DB_PORT = 	
+EVENT_DB_DATABASE = ""	
 
