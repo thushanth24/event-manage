@@ -4,27 +4,16 @@ HOST="localhost"
 PORT=3306
 DATABASE="management"
 
-DB_USER = "root"	# Type of STRING
-
-DB_PASSWORD = "karaveddy2015"	# Type of STRING
-
-DB_HOST = "localhost"	# Type of STRING
-
-DB_PORT = 3306	# Type of INTEGER
-
-DB_DATABASE = "management"	# Type of STRING
+DB_USER = "root"	
+DB_PASSWORD = "karaveddy2015"	
+DB_HOST = "localhost"	
+DB_PORT = 3306	
+DB_DATABASE = "management"	
 
 
-
-
-
-EVENT_DB_USER = "root"	# Type of STRING
-
-EVENT_DB_PASSWORD = "karaveddy2015"	# Type of STRING
-
-EVENT_DB_HOST = "localhost"	# Type of STRING
-
-EVENT_DB_PORT = 3306	# Type of INTEGER
-
-EVENT_DB_DATABASE = "management"	# Type of STRING
+EVENT_DB_USER = "root"	
+EVENT_DB_PASSWORD = "karaveddy2015"	
+EVENT_DB_HOST = "localhost"	
+EVENT_DB_PORT = 3306	
+EVENT_DB_DATABASE = "management"	
 
