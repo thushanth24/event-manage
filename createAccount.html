@@ -133,8 +133,8 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="nic" placeholder=" " required>
-                <label for="nic">NIC</label>
+                <input type="text" id="phonenumber" placeholder=" " required>
+                <label for="phonenumber">Phone Number</label>
             </div>
 
             <div class="input-group">
@@ -149,8 +149,8 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="phonenumber" placeholder=" " required>
-                <label for="phonenumber">Phone Number</label>
+                <input type="text" id="nic" placeholder=" " required>
+                <label for="nic">NIC</label>
             </div>
 
             <button type="submit">Create Account</button>
@@ -180,7 +180,7 @@
             };
 
             // Fetch request for account creation
-            fetch('http://localhost:8089/viewers', {
+            fetch('http://localhost:8089/viewers/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
